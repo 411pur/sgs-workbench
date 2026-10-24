@@ -69,6 +69,31 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 .blank.show{color:#8a1f1f;font-weight:bold;border-bottom:2px solid #b8860b}
 .qprompt{font-size:20px;line-height:2;color:#3a3226;letter-spacing:1px}
 .wycard.empty{border-style:dashed;border-color:#c9bfa8;background:#fdfbf7;color:#a89878;text-align:center;padding:44px 20px;font-size:14px;letter-spacing:2px}
+.home-card.blue .h-icon{color:#33619d}
+.mao-num{text-align:center;font-size:20px;font-weight:bold;color:#8a1f1f;letter-spacing:3px;margin:6px 0 14px}
+.mao-bar{position:relative;height:34px;border:1px solid #b8860b;border-radius:17px;background:#fff;margin:30px 14px 52px;box-shadow:0 1px 6px rgba(184,134,11,.18)}
+.mao-fill{position:absolute;left:0;top:0;bottom:0;width:0%;border-radius:17px;background:linear-gradient(90deg,#b8860b,#8a1f1f 55%,#d4af37);background-size:200% 100%;animation:maoflow 3.2s linear infinite;transition:width .9s cubic-bezier(.22,1,.36,1)}
+.mao-shine{position:absolute;top:3px;left:6%;width:36%;height:7px;border-radius:8px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);animation:maoshine 2.6s ease-in-out infinite}
+@keyframes maoflow{0%{background-position:0% 0}100%{background-position:200% 0}}
+@keyframes maoshine{0%,100%{transform:translateX(-120%)}50%{transform:translateX(320%)}}
+.mao-node{position:absolute;top:50%;width:44px;height:44px;margin-left:-22px;margin-top:-22px;border-radius:50%;background:#ece7db;border:2px solid #c9bfa8;color:#9a9080;font-style:normal;font-size:18px;line-height:40px;text-align:center;transition:.25s;z-index:2}
+.mao-node .mao-tag{position:absolute;top:48px;left:50%;transform:translateX(-50%);font-size:11.5px;color:#a89878;letter-spacing:2px;white-space:nowrap}
+.mao-node.on{background:#fff;border-color:#8a1f1f;color:#8a1f1f;cursor:pointer;box-shadow:0 0 10px rgba(138,31,31,.4);animation:maopulse 1.8s ease-in-out infinite}
+.mao-node.on .mao-tag{color:#8a1f1f;font-weight:bold}
+.mao-node.on:hover{transform:scale(1.15)}
+.mao-node.burst{animation:maoburst .9s ease-out,maopulse 1.8s ease-in-out infinite}
+@keyframes maopulse{0%,100%{box-shadow:0 0 5px rgba(138,31,31,.3)}50%{box-shadow:0 0 16px rgba(184,134,11,.8)}}
+@keyframes maoburst{0%{transform:scale(1)}30%{transform:scale(1.55)}100%{transform:scale(1)}}
+.mao-spark{position:absolute;width:6px;height:6px;border-radius:50%;background:#d4af37;pointer-events:none;z-index:3;animation:maospark .85s ease-out forwards}
+@keyframes maospark{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+.mao-full .mao-fill{box-shadow:0 0 16px rgba(212,175,55,.95),0 0 30px rgba(138,31,31,.35)}
+.mao-mask{position:fixed;inset:0;background:rgba(58,50,38,.45);display:flex;align-items:center;justify-content:center;z-index:50}
+.mao-pop{max-width:520px;width:92%;background:#fdfbf7;border:1px solid #b8860b;border-radius:12px;padding:24px;box-shadow:0 8px 30px rgba(138,31,31,.35);animation:maopop .25s ease-out}
+@keyframes maopop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+.mao-pop-src{font-size:12px;color:#b8860b;margin-bottom:4px;letter-spacing:2px}
+.mao-pop-name{font-size:26px;color:#8a1f1f;font-weight:bold;letter-spacing:5px;margin-bottom:10px}
+.mao-pop-desc{font-size:14px;line-height:1.9;color:#4a4234;margin-bottom:12px}
+.mao-pop-talk{font-size:13px;color:#6a5a3e;border-top:1px dashed #ddd3bf;padding-top:10px;margin-bottom:14px;line-height:1.9}
 </style>
 </head>
 <body>
@@ -84,12 +109,12 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <div class="home-card red" data-go="chen">
     <div class="h-icon">点</div>
     <div class="h-title">陈寿</div>
-    <div class="h-desc">婉而成章 · 蜀 · 3/3<br>【点墨】观看两个转化牌类技能，二选一，至多记 4 个<br>技能池 32 个</div>
+    <div class="h-desc">婉而成章 · 蜀 · 3/3<br>【点墨】观看两个转化牌类技能，二选一，至多记 4 个<br>技能池 33 个</div>
   </div>
   <div class="home-card gold" data-go="hun">
     <div class="h-icon">虎</div>
     <div class="h-title">魂 · 五虎上将</div>
-    <div class="h-desc">抽三张候选 · 点选其一获得<br>再按 杀/闪/桃/酒 定向随机获得<br>记录上限 5 个 · 技能池 38 个</div>
+    <div class="h-desc">抽三张候选 · 点选其一获得<br>再按 杀/闪/桃/酒 定向随机获得<br>记录上限 5 个 · 技能池 33 个</div>
   </div>
   <div class="home-card red" data-go="wuyi">
     <div class="h-icon">主</div>
@@ -101,7 +126,8 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
     <div class="h-title">屈原 · 离骚填空</div>
     <div class="h-desc">随机出一句《离骚》上下句填空<br>看答案后可收起，再抽下一句<br>题库 50 题 · 一轮内不重复</div>
   </div>
-  <div class="home-card grey" data-go="rng">
+  <div class="home-card blue" data-go="mao"><div class="h-icon">髦</div><div class="h-title">曹髦 · 道心</div><div class="h-desc">魏 · 3/4 · 霸业的终耀<br>道心进度条四段圆满，渐次解锁四大技能<br>点亮节点可点开查看秘籍</div></div>
+<div class="home-card grey" data-go="rng">
     <div class="h-icon">数</div>
     <div class="h-title">随机数</div>
     <div class="h-desc">自定义上下限<br>整数 / 小数（两位）<br>留最近 10 次结果</div>
@@ -167,7 +193,7 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
     <span class="stat" id="hunStatus2"></span>
   </div>
 </section>
-<footer>技能池 38 个 · 来源：关羽/张飞/赵云/马超/黄忠 标·界·SP·神·武·谋·威 版本（手游&实体口径整理，牌名以【】内为准）· 池内暂无含【酒】的技能</footer>
+<footer>技能池 33 个 · 来源：关羽/张飞/赵云/马超/黄忠 标·界·SP·神·武·谋·威 版本（手游&实体口径整理，牌名以【】内为准）· 池内暂无含【酒】的技能</footer>
 </div>
 
 <!-- 地主吴懿视图 -->
@@ -207,6 +233,21 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <footer>原文取自《离骚》通行本 · 题库 50 句</footer>
 </div>
 
+<!-- 曹髦·道心视图 -->
+<div id="view-mao" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>霸业的终耀 · 曹髦</h1><div class="vsub">曹髦 — 魏 · 3/4 — 三国杀移动版《荟萃·皇家贵胄》 · 别名草帽<br>【道心】潜修每满一段，依次解锁技能：潜龙 → 忿肆 → 决讨 → 助势；点击已点亮的节点查看技能全文</div></div></div>
+<section class="panel">
+<h2>道心 · 进度条</h2>
+<div class="mao-num" id="maoNum">道心 0 / 100</div>
+<div class="mao-bar" id="maoBar"><div class="mao-fill" id="maoFill"></div><div class="mao-shine"></div></div>
+<div class="toolbar"><button id="maoCult">潜修 +25</button><button id="maoReset" class="ghost">重置道心</button><span id="maoStatus">龙潜于渊，道心未启</span></div>
+<div class="mao-legend">进度存于本机浏览器 localStorage · 满100四技合一</div>
+</section>
+<div class="mao-mask hidden" id="maoMask"><div class="mao-pop">
+<div class="mao-pop-src" id="maoPopSrc"></div><div class="mao-pop-name" id="maoPopName"></div>
+<div class="mao-pop-desc" id="maoPopDesc"></div><div class="mao-pop-talk" id="maoPopTalk"></div>
+<button class="ghost" id="maoPopClose">合卷</button></div></div>
+</div>
 <!-- 随机数视图 -->
 <div id="view-rng" class="hidden">
 <div class="viewbar">
@@ -232,7 +273,7 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <script>
 /* ---------- 视图切换 ---------- */
 function go(v){
-  ["home","chen","hun","wuyi","quyuan","rng"].forEach(function(x){
+  ["home","chen","hun","wuyi","quyuan","mao","rng"].forEach(function(x){
     document.getElementById("view-"+x).classList.toggle("hidden", x!==v);
   });
   window.scrollTo(0,0);
@@ -357,7 +398,7 @@ document.getElementById("drawBtn").addEventListener("click",draw);
 document.getElementById("resetBtn").addEventListener("click",resetAll);
 
 /* ---------- 魂 · 五虎上将 ---------- */
-const HUNWU=[["关羽·标","武圣","你可以将一张红色牌当【杀】使用或打出。"],["关羽·界","武圣","①你可以将一张红色牌当【杀】使用或打出；②你使用方块【杀】无距离限制。"],["关羽·界","义绝","出牌阶段限一次，你可以弃置一张牌，令一名其他角色展示一张手牌。若此牌为红色，你获得此牌且你可以令其回复1点体力；若此牌为黑色，本回合：其所有非锁定技失效且不能使用或打出手牌、你使用红桃【杀】对其造成的伤害+1。"],["关羽·SP","单骑","觉醒技，准备阶段，若你的区域内的牌数大于体力值，你减1点体力上限，回复已损失体力值数点体力并摸等量张牌，然后获得技能“马术”和“怒嗔”。"],["关羽·神","武神","锁定技，①你的红桃手牌均视为【杀】；②你使用红桃【杀】无距离与次数限制，然后此【杀】造成伤害后，你摸一张牌。"],["关羽·神","武魂","锁定技，①当你造成/受到1点伤害后，你令受伤角色/伤害来源获得1枚“梦魇”标记；②当你死亡时，你令拥有“梦魇”标记最多的一名角色进行一次判定，若结果不为【桃】或【桃园结义】，该角色死亡。"],["关羽·武","绝武","①当你获得其他角色的牌后，这些牌点数视为2；②每回合每种牌名限一次，你可以将一张点数为2的牌当任意一种伤害牌使用。"],["关羽·武","武佑","每名角色的出牌阶段限一次，其可以交给你一张手牌，然后你可以从五个随机的非装备牌的牌名中选择一个牌名并交给其一张手牌（此牌视为你选择的牌名且使用时无距离与次数限制）。"],["关羽·武","义贤","限定技，出牌阶段，你可以选择一项：1.获得场上的所有装备牌；2.获得弃牌堆中的所有装备牌。然后你依次选择是否令被你获得牌的角色摸X张牌（X为其因此被你获得的牌数）并回复1点体力。"],["关羽·谋","冠武","锁定技，回合开始时，你从场上、弃牌堆、牌堆中获得【青龙偃月刀】。本轮你每声明使用两张【杀】后，你本轮通过【杀】造成的伤害+1。"],["关羽·谋","威势","每回合每项限一次：1.你成为其他角色非伤害牌目标后，可弃置半数手牌（向上取整），令此牌对你无效；2.其他角色使用目标包括你的伤害牌结算后，你可摸两张牌，并可对其使用一张【杀】。"],["关羽·谋","倨傲","出牌阶段限一次，你可弃置一张牌然后视为对攻击范围内任意名其他角色使用一张无次数限制的【杀】或普通锦囊牌。若如此做，此牌目标下次使用的【杀】或普通锦囊牌无距离与次数限制，且须额外指定你为目标。"],["张飞·标","咆哮","锁定技，你使用【杀】无次数限制。"],["张飞·界","咆哮","锁定技，①你使用【杀】无次数限制；②若你于出牌阶段内使用过【杀】，你本阶段使用【杀】无距离限制。"],["张飞·界","替身","出牌阶段结束时，你可以：弃置所有锦囊牌和坐骑牌，然后直到你下回合开始，当其他角色对你使用【杀】结算结束后，若此【杀】未对你造成伤害，你获得之。"],["张飞·神","神裁","出牌阶段限一次，你可以令一名其他角色进行一次判定且你获得判定牌，若判定牌包含以下内容，则其获得下列对应效果（覆盖之前的效果），否则该角色获得1个“死”标记且你获得其区域内的一张牌（有“死”标记的角色：1.其手牌上限-X，X为其“死”标记数；2.其回合结束时，若其“死”标记数大于场上存活角色数，其死亡）。判定牌含：体力，“笞”，受到伤害后失去等量体力；武器，“杖”，不能响应【杀】；打出，“徒”，不因此技能而失去手牌后随机弃置一张手牌；距离，“流”，结束阶段，将武将牌翻面。"],["张飞·神","巡使","锁定技，①你的多目标锦囊牌均视为无色【杀】；②当你使用无色牌时（这些牌无距离与次数限制且可以额外指定任意个目标），你每个出牌阶段内发动“神裁”的次数上限+1（至多加至5）。"],["张飞·武","恣胜","你使用点数大于3且为3的倍数的牌时（若为多张牌转化为一张牌则点数相加），可从牌堆中随机观看三张点数为3的牌，选择其中一张获得；你弃置或获得其他角色牌时，可对该角色造成等量伤害（不超过该角色当前体力值）。"],["张飞·武","显略","①出牌阶段每名角色限一次，你可以观看本回合受到过伤害或失去过牌的一名其他角色的手牌并记录其中所有当前未被记录的点数；②当本次记录点数的数量增加后首次分别超过3、6、9个时，你摸三张牌。若已因此记录至可记录点数上限，则清除记录且“豪贤”视为未发动过；③你每次造成伤害令其他角色进入濒死状态后，本次记录可记录点数上限减少3个。"],["张飞·武","豪贤","限定技，出牌阶段，你可以将弃牌堆中所有点数为3的牌随机置入牌堆，然后获得其他角色手牌中点数为3的牌。"],["赵云·标","龙胆","你可以将一张【杀】当【闪】、【闪】当【杀】使用或打出。"],["赵云·界","龙胆","你可以将一张【杀】当【闪】、【闪】当【杀】使用或打出。若：你以此法使用的【杀】被其他角色使用的【闪】抵消时，你可以对另一名角色造成1点伤害；你以此法使用【闪】抵消其他角色使用的【杀】时，你可以令另一名其他角色回复1点体力。"],["赵云·界","涯角","当你于回合外使用或打出手牌时，你可以展示牌堆顶的一张牌并将之交给一名角色，然后若这两张牌类别不同，你弃置一张牌。"],["赵云·SP","冲阵","当你发动“龙胆”使用或打出一张手牌时，你可以立即获得对方的1张手牌或对对方造成1点伤害，若其因此失去最后1张手牌或进入濒死状态，你摸2张牌。"],["赵云·神","龙魂","你可以将一至两张花色相同的牌当一张对应牌使用或打出：红桃当【桃】；方块当火【杀】；梅花当【闪】；黑桃当【无懈可击】。若你以此法转化了两张：红色牌，此牌使用时回复值或伤害值+1；黑色牌，你弃置当前回合角色的一张牌。"],["赵云·神","绝境","当你造成伤害时，若你的体力小于受伤角色，此伤害+1；当你受到伤害时，若你的手牌数小于伤害来源，此伤害-1。"],["马超·标","马术","锁定技，你计算与其他角色的距离-1。"],["马超·标","铁骑","当你使用【杀】指定一名角色为目标后，你可以进行一次判定，若结果为红色，其不能使用【闪】响应此【杀】。"],["马超·界","铁骑","当你使用【杀】指定一名角色为目标后，你可以令其本回合所有非锁定技失效，然后你进行一次判定，除非该角色弃置一张与判定结果花色相同的牌，否则其不能使用【闪】响应此【杀】。"],["马超·SP","追击","锁定技，你计算与体力值不大于你的其他角色的距离视为1。"],["马超·SP","誓仇","当你使用【杀】时，你可以多选择至多X名角色为目标（X为你已损失的体力值）。此【杀】结算结束后，若此【杀】未造成伤害，你获得之。"],["马超·神","狩骊","①游戏开始时，从你的下家开始，所有角色随机使用牌堆中的一张坐骑牌；②当你需要使用或打出【杀】/【闪】时，你可以获得一名角色装备区里的一张进攻/防御坐骑牌（即将因此失去牌的角色本回合所有非锁定技失效、你与其本回合受到的伤害+1且视为雷电伤害），然后你将此牌当无次数限制的【杀】/【闪】使用或打出。"],["马超·神","横骛","当你使用或打出牌时，若你没有与此牌花色相同的手牌，你可以摸X张牌（X为场上与此牌花色相同的装备数）。"],["马超·威","众讨","出牌阶段限一次，你可以选择一种花色（你每有1点损失体力值可额外选择一种花色），然后随机从场上、弃牌堆或牌堆获得你选择花色的各一张牌。若如此做，你使用过三种类别的牌后，此技能视为未发动过。"],["马超·威","极斩","连招技，（装备牌+黑色牌），你选择一项：1.弃置其他角色共计至多X张牌；2.对一名其他角色造成X点伤害，然后此技能本回合失效（X为“极斩”本回合发动次数）。"],["黄忠·界","烈弓","①你对你计算与其距离不大于【杀】的点数的其他角色使用此【杀】无距离限制；②当你使用【杀】指定一名角色为目标后，你可以执行符合条件的项：1.若你的手牌数不小于其，其不能使用【闪】响应此【杀】；2.若你的体力值不大于其，此【杀】对其造成的伤害+1。"],["黄忠·神","裂穹","当你对其他角色造成伤害后，你可以击伤其一个部位（若其本回合未被你击伤过，你不能击伤其天冲）：天冲，令其失去其体力值数点体力（若其因此死亡，你加1点体力上限）；力烽，令其随机弃置一半的手牌（向上取整）；地机，令其下一次受到的伤害+1直到其回合结束；中枢，令其使用的下一张牌无效直到其回合结束；气海，令其不能使用或打出红桃牌直到其回合结束。"],["黄忠·神","斩决","出牌阶段开始时，你可以选择一项：1.摸体力值数张牌，你本阶段下一次使用【杀】无距离限制且不能被响应；2.摸已损失的体力值数张牌，当你本阶段下一次造成伤害后，回复伤害值数点体力。"]]; /* [出处, 技能名, 描述] */
+const HUNWU=[["关羽·标","武圣","你可以将一张红色牌当【杀】使用或打出。"],["关羽·界","武圣","①你可以将一张红色牌当【杀】使用或打出；②你使用方块【杀】无距离限制。"],["关羽·界","义绝","出牌阶段限一次，你可以弃置一张牌，令一名其他角色展示一张手牌。若此牌为红色，你获得此牌且你可以令其回复1点体力；若此牌为黑色，本回合：其所有非锁定技失效且不能使用或打出手牌、你使用红桃【杀】对其造成的伤害+1。"],["关羽·SP","单骑","觉醒技，准备阶段，若你的区域内的牌数大于体力值，你减1点体力上限，回复已损失体力值数点体力并摸等量张牌，然后获得技能“马术”和“怒嗔”。"],["关羽·神","武神","锁定技，①你的红桃手牌均视为【杀】；②你使用红桃【杀】无距离与次数限制，然后此【杀】造成伤害后，你摸一张牌。"],["关羽·武","绝武","①当你获得其他角色的牌后，这些牌点数视为2；②每回合每种牌名限一次，你可以将一张点数为2的牌当任意一种伤害牌使用。"],["关羽·武","武佑","每名角色的出牌阶段限一次，其可以交给你一张手牌，然后你可以从五个随机的非装备牌的牌名中选择一个牌名并交给其一张手牌（此牌视为你选择的牌名且使用时无距离与次数限制）。"],["关羽·武","义贤","限定技，出牌阶段，你可以选择一项：1.获得场上的所有装备牌；2.获得弃牌堆中的所有装备牌。然后你依次选择是否令被你获得牌的角色摸X张牌（X为其因此被你获得的牌数）并回复1点体力。"],["关羽·谋","冠武","锁定技，回合开始时，你从场上、弃牌堆、牌堆中获得【青龙偃月刀】。本轮你每声明使用两张【杀】后，你本轮通过【杀】造成的伤害+1。"],["关羽·谋","威势","每回合每项限一次：1.你成为其他角色非伤害牌目标后，可弃置半数手牌（向上取整），令此牌对你无效；2.其他角色使用目标包括你的伤害牌结算后，你可摸两张牌，并可对其使用一张【杀】。"],["关羽·谋","倨傲","出牌阶段限一次，你可弃置一张牌然后视为对攻击范围内任意名其他角色使用一张无次数限制的【杀】或普通锦囊牌。若如此做，此牌目标下次使用的【杀】或普通锦囊牌无距离与次数限制，且须额外指定你为目标。"],["张飞·标","咆哮","锁定技，你使用【杀】无次数限制。"],["张飞·界","咆哮","锁定技，①你使用【杀】无次数限制；②若你于出牌阶段内使用过【杀】，你本阶段使用【杀】无距离限制。"],["张飞·界","替身","出牌阶段结束时，你可以：弃置所有锦囊牌和坐骑牌，然后直到你下回合开始，当其他角色对你使用【杀】结算结束后，若此【杀】未对你造成伤害，你获得之。"],["张飞·武","恣胜","你使用点数大于3且为3的倍数的牌时（若为多张牌转化为一张牌则点数相加），可从牌堆中随机观看三张点数为3的牌，选择其中一张获得；你弃置或获得其他角色牌时，可对该角色造成等量伤害（不超过该角色当前体力值）。"],["张飞·武","豪贤","限定技，出牌阶段，你可以将弃牌堆中所有点数为3的牌随机置入牌堆，然后获得其他角色手牌中点数为3的牌。"],["赵云·标","龙胆","你可以将一张【杀】当【闪】、【闪】当【杀】使用或打出。"],["赵云·界","龙胆","你可以将一张【杀】当【闪】、【闪】当【杀】使用或打出。若：你以此法使用的【杀】被其他角色使用的【闪】抵消时，你可以对另一名角色造成1点伤害；你以此法使用【闪】抵消其他角色使用的【杀】时，你可以令另一名其他角色回复1点体力。"],["赵云·界","涯角","当你于回合外使用或打出手牌时，你可以展示牌堆顶的一张牌并将之交给一名角色，然后若这两张牌类别不同，你弃置一张牌。"],["赵云·SP","冲阵","当你发动“龙胆”使用或打出一张手牌时，你可以立即获得对方的1张手牌或对对方造成1点伤害，若其因此失去最后1张手牌或进入濒死状态，你摸2张牌。"],["赵云·神","龙魂","你可以将一至两张花色相同的牌当一张对应牌使用或打出：红桃当【桃】；方块当火【杀】；梅花当【闪】；黑桃当【无懈可击】。若你以此法转化了两张：红色牌，此牌使用时回复值或伤害值+1；黑色牌，你弃置当前回合角色的一张牌。"],["赵云·神","绝境","当你造成伤害时，若你的体力小于受伤角色，此伤害+1；当你受到伤害时，若你的手牌数小于伤害来源，此伤害-1。"],["马超·标","马术","锁定技，你计算与其他角色的距离-1。"],["马超·标","铁骑","当你使用【杀】指定一名角色为目标后，你可以进行一次判定，若结果为红色，其不能使用【闪】响应此【杀】。"],["马超·界","铁骑","当你使用【杀】指定一名角色为目标后，你可以令其本回合所有非锁定技失效，然后你进行一次判定，除非该角色弃置一张与判定结果花色相同的牌，否则其不能使用【闪】响应此【杀】。"],["马超·SP","追击","锁定技，你计算与体力值不大于你的其他角色的距离视为1。"],["马超·SP","誓仇","当你使用【杀】时，你可以多选择至多X名角色为目标（X为你已损失的体力值）。此【杀】结算结束后，若此【杀】未造成伤害，你获得之。"],["马超·神","横骛","当你使用或打出牌时，若你没有与此牌花色相同的手牌，你可以摸X张牌（X为场上与此牌花色相同的装备数）。"],["马超·威","众讨","出牌阶段限一次，你可以选择一种花色（你每有1点损失体力值可额外选择一种花色），然后随机从场上、弃牌堆或牌堆获得你选择花色的各一张牌。若如此做，你使用过三种类别的牌后，此技能视为未发动过。"],["马超·威","极斩","连招技，（装备牌+黑色牌），你选择一项：1.弃置其他角色共计至多X张牌；2.对一名其他角色造成X点伤害，然后此技能本回合失效（X为“极斩”本回合发动次数）。"],["黄忠·界","烈弓","①你对你计算与其距离不大于【杀】的点数的其他角色使用此【杀】无距离限制；②当你使用【杀】指定一名角色为目标后，你可以执行符合条件的项：1.若你的手牌数不小于其，其不能使用【闪】响应此【杀】；2.若你的体力值不大于其，此【杀】对其造成的伤害+1。"],["黄忠·神","斩决","出牌阶段开始时，你可以选择一项：1.摸体力值数张牌，你本阶段下一次使用【杀】无距离限制且不能被响应；2.摸已损失的体力值数张牌，当你本阶段下一次造成伤害后，回复伤害值数点体力。"]]; /* [出处, 技能名, 描述] */
 const HUN_KEY="hunwuhu_recorded_v1";
 const HUN_MAX=5;
 let hunRecorded=[];
@@ -582,6 +623,53 @@ function genRand(){
 document.getElementById("rngBtn").addEventListener("click",genRand);
 
 render();
+
+/* ---------- 曹髦 · 道心 ---------- */
+const MAO=[["潜龙","当你受到伤害后，你可以展示牌堆顶的三张牌，获得其中的任意张牌（至多为你已损失的体力值数张），然后将剩余的牌以任意顺序置于牌堆底。","鸟栖于林，龙潜于渊。 / 游鱼惊钓，潜龙飞天。"],
+["忿肆","锁定技，准备阶段，你对一名体力值不小于你的角色造成1点伤害。若该角色不为你，其视为对你使用一张【杀】。","此贼之心，路人皆知！ / 孤君烈忿，怒愈秋霜。"],
+["决讨","限定技，出牌阶段开始时，若你的体力值为1，你可以选择一名角色，依次使用牌堆底的牌直到不能使用为止（只能指定你或该角色为目标）。","登车拔剑起，奋跃搏乱臣。 / 陵云决心意，登辇讨不臣。"],
+["助势","主公技，每名其他魏势力的角色的回合限一次，当该角色回复体力时，其可以令你摸一张牌。","可有爱卿愿助朕讨贼？ / 泱泱大魏，忠臣俱亡乎？"]];
+const MAO_TAGS=["潜龙","忿肆","决讨","助势"];
+let maoS={p:0};
+try{maoS=JSON.parse(localStorage.getItem("caomao_state_v1")||"{\"p\":0}")}catch(e){}
+function maoSave(){try{localStorage.setItem("caomao_state_v1",JSON.stringify(maoS))}catch(e){}}
+const maoBar=document.getElementById("maoBar");
+(function(){for(let i=0;i<4;i++){const n=document.createElement("i");n.className="mao-node";n.dataset.i=i;n.style.left=(25*(i+1))+"%";n.innerHTML="？<span class=\"mao-tag\">"+MAO_TAGS[i]+"</span>";maoBar.appendChild(n);}})();
+function maoSpark(node){for(let k=0;k<12;k++){const s=document.createElement("span");s.className="mao-spark";const a=Math.random()*Math.PI*2,d=26+Math.random()*30;s.style.left=node.style.left;s.style.top="50%";s.style.setProperty("--dx",(Math.cos(a)*d)+"px");s.style.setProperty("--dy",(Math.sin(a)*d)+"px");maoBar.appendChild(s);setTimeout(()=>s.remove(),900);}}
+function maoRender(burstIdx){
+  const p=maoS.p;
+  document.getElementById("maoFill").style.width=(p*25)+"%";
+  document.getElementById("maoNum").textContent="道心 "+(p*25)+" / 100";
+  maoBar.classList.toggle("mao-full",p>=4);
+  document.querySelectorAll(".mao-node").forEach(function(n){
+    const i=+n.dataset.i, on=i<p;
+    n.classList.toggle("on",on);
+    if(on) n.firstChild.textContent=MAO_TAGS[i][0]; else n.firstChild.textContent="？";
+    if(i===burstIdx){n.classList.remove("burst");void n.offsetWidth;n.classList.add("burst");maoSpark(n);}
+  });
+  document.getElementById("maoCult").disabled=(p>=4);
+  document.getElementById("maoCult").textContent=(p>=4)?"四技合一":"潜修 +25";
+  if(p>=4)document.getElementById("maoStatus").textContent="潜龙飞天，四技俱全 —— 宁作高贵乡公死，不作汉献帝生。";
+}
+document.getElementById("maoCult").addEventListener("click",function(){
+  if(maoS.p>=4)return;
+  const at=maoS.p; maoS.p++; maoSave(); maoRender(at);
+  if(maoS.p<4)document.getElementById("maoStatus").textContent="道心初成【"+MAO_TAGS[maoS.p-1]+"】，点节点可观秘籍";
+});
+document.addEventListener("click",function(e){
+  const n=e.target.closest(".mao-node"); if(!n)return;
+  const i=+n.dataset.i;
+  if(i>=maoS.p){document.getElementById("maoStatus").textContent="道心未至【"+MAO_TAGS[i]+"】——尚需潜修";return;}
+  document.getElementById("maoPopSrc").textContent="曹髦 · 魏 · 3/4 · 第"+(i+1)+"段道心";
+  document.getElementById("maoPopName").textContent=MAO[i][0];
+  document.getElementById("maoPopDesc").textContent=MAO[i][1];
+  document.getElementById("maoPopTalk").textContent="台词："+MAO[i][2];
+  document.getElementById("maoMask").classList.remove("hidden");
+});
+document.getElementById("maoPopClose").addEventListener("click",function(){document.getElementById("maoMask").classList.add("hidden")});
+document.getElementById("maoMask").addEventListener("click",function(e){if(e.target===this)this.classList.add("hidden")});
+document.getElementById("maoReset").addEventListener("click",function(){maoS={p:0};maoSave();maoRender(-1);document.getElementById("maoStatus").textContent="龙潜于渊，道心未启"});
+maoRender(-1);
 </script>
 </body>
 </html>
