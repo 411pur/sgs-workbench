@@ -131,6 +131,11 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
     <div class="h-title">曹髦 · 道心</div>
     <div class="h-desc">魏 · 3勾玉 · 向死存魏<br>潜龙攒道心，25/50/75/99 解锁清正·酒诗·放逐·决进<br>主公卫统，开局道心六十</div>
   </div>
+<div class="home-card blue" data-go="xuxu">
+  <div class="h-icon">囊</div>
+  <div class="h-title">荀彧&荀攸 · 智囊</div>
+  <div class="h-desc">谋定天下 · 魏 · WEI013&020 · 地主专属<br>【智囊】随机获得一个名/台词含"谋"的技能<br>技能池 80 个（名 14 + 词 66）· 词命中必标台词</div>
+</div>
 <div class="home-card grey" data-go="rng">
     <div class="h-icon">数</div>
     <div class="h-title">随机数</div>
@@ -264,6 +269,13 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <footer>阵亡：纵不成身死，朕亦为太祖子孙，大魏君王…… · 胜利：少康诛寒浞以中兴，朕夷司马，未尝不可！</footer>
 </div>
 <!-- 随机数视图 -->
+<div id="view-xuxu" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>荀彧&荀攸 · 智囊</h1></div></div>
+<div class="panel"><h2>武将牌</h2><div style="font-size:14px;line-height:1.9"><b style="color:#8a1f1f">谋定天下 · 荀彧&荀攸</b>　魏　编号 WEI013&020　地主专属武将（十周年·斗地主模式，活动上线后现已下线）<br><span style="color:#b8860b">"你我叔侄齐上，焉有一合之敌？"</span><div style="margin-top:6px;font-size:12.5px;color:#8a7a5e">叔：荀彧（文若）　侄：荀攸（公达）。线下实体为《天水濯名》/《巅峰斗地主》。</div></div></div>
+<div class="panel"><h2>主技能 · 智囊（本视图实现；副技能"苟渚"未实现）</h2><div style="font-size:13.5px;line-height:1.9"><b>线上 2024（十周年）：</b>当你使用锦囊/装备牌后，你可以获得一个技能台词/技能名包含"谋"的技能，直到下次因使用此类别的牌获得技能。<br><b>线下 2026（天水濯名/巅峰斗地主）：</b>当你使用非基本牌后，你可以随机获得一张武将牌，然后选择此武将牌上的一个技能获得（优先选择技能名包含"谋"的技能），直到下次发动此技能。<br><span style="font-size:12.5px;color:#8a7a5e">注：线上描述的"技能台词包含谋"实际未正确配置，可能抽到池外技能（萌娘百科记载）。本工作台按词条给出的线下专属技能库（80 技）为准。</span></div></div>
+<div class="panel"><h2>发动智囊</h2><div id="xxySlot" class="slot" style="min-height:96px;margin-bottom:12px">尚未发动 · 点击下方按钮模拟"因使用非基本牌"获得一个含"谋"的技能</div><div class="toolbar"><button id="xxyDraw">发动智囊</button><button id="xxyToggle" class="ghost">查看技能池（80）</button><button id="xxyReset" class="ghost">重置</button><span id="xxyStat" style="font-size:13px;color:#8a7a5e"></span></div></div>
+<div class="panel hidden" id="xxyPoolPanel"><h2>智囊技能池（《天水濯名》线下专属技能库）</h2><div id="xxyPoolList" style="font-size:13px;line-height:1.8"></div></div>
+</div>
 <div id="view-rng" class="hidden">
 <div class="viewbar">
   <button class="ghost" data-go="home">← 首页</button>
@@ -288,7 +300,7 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <script>
 /* ---------- 视图切换 ---------- */
 function go(v){
-  ["home","chen","hun","wuyi","quyuan","mao","rng"].forEach(function(x){
+  ["home","chen","hun","wuyi","quyuan","mao","xuxu","rng"].forEach(function(x){
     document.getElementById("view-"+x).classList.toggle("hidden", x!==v);
   });
   window.scrollTo(0,0);
@@ -701,6 +713,123 @@ document.getElementById("maoPopClose").addEventListener("click",function(){docum
 document.getElementById("maoMask").addEventListener("click",function(e){if(e.target===this)this.classList.add("hidden")});
 document.getElementById("maoReset").addEventListener("click",function(){maoS={v:0};maoSave();maoRender(-1);document.getElementById("maoStatus").textContent="龙潜于渊，道心未启"});
 maoRender(-1);
+</script>
+<script>
+(function(){
+var MOUP=[
+["魏延","奇谋","名","","",""],
+["神吕布","无谋","名","","",""],
+["王允","谋逞","名","","",""],
+["何进","谋诛","名","","",""],
+["张邈","谋逆","名","","准备阶段，你展示所有手牌并可以依次对一名其他角色使用你手牌中所有的【杀】（至多直到该角色进入濒死状态），然后若以此法使用的【杀】中有未造成伤害的【杀】，你跳过本回合的下一个出牌阶段和弃牌阶段。",""],
+["伏完","谋溃","名","","",""],
+["吕蒙（国）","谋断","名","","",""],
+["桓范","腹谋","名","","",""],
+["谋鲁肃","盟谋","名","","转换技，游戏开始时，你可以转换此技能的状态。每回合各限一次，当你获得其他角色的手牌或其他角色获得你的手牌后，你可以令该角色展示所有手牌：阳：使用X张【杀】，每造成1点伤害回复1点体力；阴：打出X张【杀】，每少打出一张失去1点体力（X为你的体力上限）。",""],
+["谋周瑜","英谋","名","","转换技，游戏开始时，你可以转换此技能的状态。每回合限一次，当你对其他角色使用牌后，你可以选择其中一名目标角色，阳：你将手牌摸至与其相同（至多摸五张），然后视为对其使用一张【火攻】；阴：你令全场手牌数最多的一名角色展示手牌，若其手牌中有【杀】或伤害类锦囊牌，则其对该目标角色使用这些牌，否则其将手牌弃置至与你相同。",""],
+["谋司马懿","权谋","名","","",""],
+["谋贾诩","覆谋","名","","",""],
+["谋郭嘉","先谋","名","","",""],
+["谋王凌","谋立","名","","",""],
+["韩浩&史涣","慎断","词","行军需慎，谋断当绝！","",""],
+["吕蒙","攻心","词","料其图谋不轨，此战易得先机。","",""],
+["吕蒙","克己","词","韬光养晦，谋定而动。","",""],
+["周瑜","英姿","词","胸中多智谋，胜券皆可握！","",""],
+["郭嘉","遗计","词","策谋本天成，妙手偶得之。","",""],
+["郭淮","精策","词","成事在天，谋事在人。","",""],
+["司马懿","鬼才","词","谋事在人，成事岂能由天？","",""],
+["王平（国）","将略","词","奇谋为短，将略为要。","",""],
+["王平","兵略","词","兵贵于精，将胜于谋。","",""],
+["蒋干","伪诚","词","略施谋略，敌军便信以为真。","",""],
+["顾雍","慎行","词","谋而后动，行不容差。","",""],
+["刘繇","戡难","词","避公明谋乱，逐公明心腹。","出牌阶段，若你于此阶段内发动过此技能的次数小于X（X为你的体力值），你可以与你于此阶段内未以此法拼点过的一名角色拼点，然后将其中一张拼点牌置于拼点赢的角色的武将牌旁，称为“戡”。若你赢，你于此阶段内不能发动此技能。有“戡”的角色每有一张“戡”，使用的下一张【杀】造成的伤害+1，然后移去其所有“戡”。",""],
+["刘焉","图射","词","非英杰不图？吾既谋之且射毕。","当你使用非装备牌指定目标后，若你的手牌中没有基本牌，你可以展示所有手牌并摸X张牌（X为此牌指定的目标数）。",""],
+["辛宪英","才识","词","为谋大计，失小利亦无妨。","摸牌阶段结束时，你可以展示你本阶段摸的牌，若花色：相同，本回合“忠鉴”改为“出牌阶段限两次”；不同，你可以回复1点体力，然后本回合不能对自己使用牌。",""],
+["郭皇后","殚心","词","殚精出谋，以保社稷。","",""],
+["蔡夫人","窃听","词","谋略未定，窃听以察先机。","其他角色的回合结束时，若其未于此回合内：造成过伤害，你可以摸一张牌；对除其外的角色使用过牌，你可以将其装备区里的一张牌置入你的装备区。",""],
+["张邈","纵反","词","今天下未定，有能者皆可谋之！","觉醒技，回合结束时，若你本回合发动过“谋逆”且未跳过出牌阶段，你选择是否交给一名其他角色任意张牌，加X点体力上限并回复X点体力（X为你交给其的牌数且至多为5），然后失去“谋逆”，获得“战孤”。",""],
+["于禁（国）","节钺","词","用兵之道，先定其谋，然后乃施其事。","",""],
+["曹操","奸雄","词","夫英雄者，胸怀大志，腹有良谋。","",""],
+["孙策","魂姿","词","愿承父志，与公瑾，共谋天下！","",""],
+["钟会","权计","词","操权弄略，舍小利而谋大局。","",""],
+["钟会","排异","词","道不同，不相谋。","",""],
+["徐庶","潜心","词","侠客可救数人，谋臣可救天下苍生！","",""],
+["梁兴","掳掠","词","凶兵大掠将至，或舍财谋命、或舍命谋财！","",""],
+["张飞","替身","词","欺我无谋，定要尔等血偿！","",""],
+["郭汜","伺盗","词","大盗谋国，乘虚而窃！","",""],
+["伊籍","机捷","词","机敏谋辩，不辱吾主之威。","",""],
+["王异","秘计","词","密谋筹策，奇计制敌。","",""],
+["神张辽","夺锐","词","力慑孙仲谋，威震逍遥津！","",""],
+["徐氏","伏诛","词","含恨谋划，忍辱数年，只为今日！","一名男性角色的结束阶段，若牌堆剩余牌数不大于你体力值的十倍，你可以依次展示牌堆顶的牌，然后对其使用其中的X张【杀】并洗牌（X为游戏人数）。",""],
+["刘巴","铸币","词","安邦定国之谋，下者曰伐，上者曰商。","",""],
+["朱桓","奋励","词","伺机待发，谋定而后动。","",""],
+["李儒","绝策","词","乏谋少计，别做无谓挣扎了！","",""],
+["陈宫","明策","词","阁下若纳此谋，则大业可成也！","",""],
+["荀攸","奇策","词","奇谋良策，绝击天下！","",""],
+["郭图&逢纪","饰非","词","良谋失利，罪在先锋！","",""],
+["荀谌","锋略","词","手握十全谋筹之卷，腹含百战雄兵之锋。","","旧版文本"],
+["诸葛瞻","父荫","词","先父所谋天衣无缝，必能救一时之急！","",""],
+["陆抗","集智","词","下战伐兵，上战伐谋。","",""],
+["陆抗","破势","词","破晋军雄威，断敌心谋略。","",""],
+["孙资&刘放","伪谠","词","今既掌玺握权，焉能不为己谋划？","其他角色的结束阶段，你可以展示一张牌名字数为X的牌并置于牌堆底，然后获得弃牌堆中一张牌名字数为X的牌（X为本回合未进入弃牌堆的花色数），并使用之。",""],
+["陈群","定品","词","以九品抡才，正是栋梁之谋。","","未突破"],
+["李傕","亦算","词","吾亦能善算谋划。","",""],
+["孙权","制衡","词","不急不躁，稳谋应对。","",""],
+["蒯良&蒯越","荐降","词","归曹乃共谋大事之举，我辈岂屈膝逢迎之人。","",""],
+["王昶","开济","词","谋虑渊深，料远若近。","",""],
+["许攸","成略","词","阿瞒无谋少智，可依吾策施为。","",""],
+["戏志才","筹策","词","一谋一思，皆破敌重围。","",""],
+["神陆逊","军略","词","才略计谋，此为行军之法。","",""],
+["孙亮","溃诛","词","子通专恣，必谋而诛之。","",""],
+["孙休","诏缚","词","书天子之诏，筹宴请之谋，缚乱政之臣。","",""],
+["孙鲁班","溃诛","词","萋兮斐兮，谋欲谮人！","",""],
+["凌统（国）","旋略","词","蹈刃不旋，谋略先行！","",""],
+["钟繇","佐定","词","只有忠心，没有谋略是不够的。","",""],
+["孙桓","逆击","词","将者临战，谋先定而后动兵戈。","",""],
+["孙翎鸾","盻睇","词","君欲谋大业于四海，妾当寄青鸟于春秋。","",""],
+["许劭","评荐","词","千帆过尽，评枭雄之谋，论天下分合！","",""],
+["灵雎","竭缘","词","竭心筹谋，动手时机已到。","",""],
+["严夫人","谗逆","词","陈宫曾有谋逆之嫌，若从其策，夫君危矣。","",""],
+["SP徐庶","无言","词","曹公有谋士千百之数，少我一人又如何？","",""],
+["赵昂","夙守","词","敌众我寡，怎可少谋？","",""],
+["SP赵云","龙胆","词","大将军，岂可有勇无谋？","",""],
+["贾充","悖逆","词","臣等忠心耿耿，陛下何故谋反！","",""],
+["黄月英","集智","词","机巧谋略，我皆不输于你。","","未突破"],
+["谋贾诩","肃身","词","谋先于行则昌，行先于谋则亡。","",""],
+["杨弘","间计","词","吕氏无谋，可往而说之与备反目。","",""]
+]; /* [武将,技能,名/词,台词,线下描述,备注] */
+function rint2(n){var a=new Uint32Array(1),L=Math.floor(4294967296/n)*n,x;do{crypto.getRandomValues(a);x=a[0];}while(x>=L);return x%n;}
+function esc2(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+var KEY="xuxu_zhinang_v1";var st;try{st=JSON.parse(localStorage.getItem(KEY)||"{\"idx\":-1,\"n\":0}");}catch(e){st={idx:-1,n:0};}
+if(typeof st.idx!=="number"||st.idx<-1||st.idx>=MOUP.length)st.idx=-1;
+function save(){localStorage.setItem(KEY,JSON.stringify(st));}
+function badge(k){return k==="名"?
+  '<span style="background:#b8860b;color:#fff;border-radius:4px;padding:1px 6px;font-size:11.5px">技能名命中</span>':
+  '<span style="background:#8a1f1f;color:#fff;border-radius:4px;padding:1px 6px;font-size:11.5px">台词命中</span>';}
+function cardHtml(e){
+  var h='<div><span style="font-size:17px;font-weight:bold;color:#8a1f1f">'+esc2(e[1])+'</span> '+badge(e[2]);
+  if(e[5])h+=' <span style="font-size:11px;color:#a89878">('+e[5]+')</span>';
+  h+='<div style="font-size:12.5px;color:#8a7a5e;margin:2px 0 4px">出处：'+esc2(e[0])+'</div>';
+  if(e[3])h+='<div style="color:#8a1f1f;font-size:13px">台词：'+esc2(e[3])+'</div>';
+  if(e[4])h+='<div style="font-size:13px;margin-top:4px">'+esc2(e[4])+'</div>';
+  else h+='<div style="font-size:12px;color:#a89878;margin-top:4px">描述与线上版本相同（详见游戏内文本）</div>';
+  return h+'</div>';}
+function render(){
+  var el=document.getElementById("xxySlot");
+  if(st.idx<0){el.className="slot";el.innerHTML="尚未发动 · 点击下方按钮模拟、因使用非基本牌、获得一个含“谋”的技能";}
+  else{el.className="slot filled";el.innerHTML=cardHtml(MOUP[st.idx]);}
+  document.getElementById("xxyStat").textContent="累计发动 "+st.n+" 次 · 池 "+MOUP.length;}
+function draw(){var i=rint2(MOUP.length);if(i===st.idx&&MOUP.length>1)i=(i+1+rint2(MOUP.length-1))%MOUP.length;st.idx=i;st.n=st.n+1;save();render();}
+function buildList(){
+  var rows=MOUP.map(function(e,i){return '<div style="border-bottom:1px dashed #e3dccb;padding:6px 0">'+(i+1)+'. '+cardHtml(e)+'</div>';});
+  document.getElementById("xxyPoolList").innerHTML=rows.join("");}
+document.getElementById("xxyDraw").addEventListener("click",draw);
+document.getElementById("xxyReset").addEventListener("click",function(){st={idx:-1,n:0};save();render();});
+document.getElementById("xxyToggle").addEventListener("click",function(){
+  var p=document.getElementById("xxyPoolPanel");
+  if(p.classList.contains("hidden")){buildList();p.classList.remove("hidden");}});
+window.__xxy={pool:MOUP,st:st,draw:draw,render:render,cardHtml:cardHtml};
+})();
 </script>
 </body>
 </html>
