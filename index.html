@@ -126,7 +126,11 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
     <div class="h-title">屈原 · 离骚填空</div>
     <div class="h-desc">随机出一句《离骚》上下句填空<br>看答案后可收起，再抽下一句<br>题库 50 题 · 一轮内不重复</div>
   </div>
-  <div class="home-card blue" data-go="mao"><div class="h-icon">髦</div><div class="h-title">曹髦 · 道心</div><div class="h-desc">魏 · 3/4 · 霸业的终耀<br>道心进度条四段圆满，渐次解锁四大技能<br>点亮节点可点开查看秘籍</div></div>
+  <div class="home-card blue" data-go="mao">
+    <div class="h-icon">髦</div>
+    <div class="h-title">曹髦 · 道心</div>
+    <div class="h-desc">魏 · 3勾玉 · 向死存魏<br>潜龙攒道心，25/50/75/99 解锁清正·酒诗·放逐·决进<br>主公卫统，开局道心六十</div>
+  </div>
 <div class="home-card grey" data-go="rng">
     <div class="h-icon">数</div>
     <div class="h-title">随机数</div>
@@ -235,18 +239,29 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 
 <!-- 曹髦·道心视图 -->
 <div id="view-mao" class="hidden">
-<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>霸业的终耀 · 曹髦</h1><div class="vsub">曹髦 — 魏 · 3/4 — 三国杀移动版《荟萃·皇家贵胄》 · 别名草帽<br>【道心】潜修每满一段，依次解锁技能：潜龙 → 忿肆 → 决讨 → 助势；点击已点亮的节点查看技能全文</div></div></div>
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>向死存魏 · 曹髦</h1><div class="vsub">曹髦 — 魏 · 3勾玉 — 三国杀移动版《龙血玄黄》 · 别名草帽<br>【潜龙】持恒技攒"道心"值（至多99），道心不小于 25/50/75/99 时依次获得技能：清正 → 酒诗 → 放逐 → 决进；【卫统】主公技，开局道心改为60。点击已点亮节点查看技能全文。</div></div></div>
+<section class="panel">
+  <h2>本体技能</h2>
+  <div id="maoCore"></div>
+</section>
 <section class="panel">
 <h2>道心 · 进度条</h2>
-<div class="mao-num" id="maoNum">道心 0 / 100</div>
+<div class="mao-num" id="maoNum">道心 0 / 99</div>
 <div class="mao-bar" id="maoBar"><div class="mao-fill" id="maoFill"></div><div class="mao-shine"></div></div>
-<div class="toolbar"><button id="maoCult">潜修 +25</button><button id="maoReset" class="ghost">重置道心</button><span id="maoStatus">龙潜于渊，道心未启</span></div>
-<div class="mao-legend">进度存于本机浏览器 localStorage · 满100四技合一</div>
+<div class="toolbar">
+  <button id="maoDeal">造成1点伤害 +15</button>
+  <button id="maoTake">受到1点伤害 +10</button>
+  <button id="maoCard">获得牌 +5</button>
+  <button id="maoReset" class="ghost">重置道心</button>
+</div>
+<div class="toolbar"><span id="maoStatus">龙潜于渊，道心未启</span></div>
+<div class="mao-legend">道心值存于本机浏览器 localStorage · 99 点四技俱全</div>
 </section>
 <div class="mao-mask hidden" id="maoMask"><div class="mao-pop">
 <div class="mao-pop-src" id="maoPopSrc"></div><div class="mao-pop-name" id="maoPopName"></div>
 <div class="mao-pop-desc" id="maoPopDesc"></div><div class="mao-pop-talk" id="maoPopTalk"></div>
 <button class="ghost" id="maoPopClose">合卷</button></div></div>
+<footer>阵亡：纵不成身死，朕亦为太祖子孙，大魏君王…… · 胜利：少康诛寒浞以中兴，朕夷司马，未尝不可！</footer>
 </div>
 <!-- 随机数视图 -->
 <div id="view-rng" class="hidden">
@@ -625,42 +640,58 @@ document.getElementById("rngBtn").addEventListener("click",genRand);
 render();
 
 /* ---------- 曹髦 · 道心 ---------- */
-const MAO=[["潜龙","当你受到伤害后，你可以展示牌堆顶的三张牌，获得其中的任意张牌（至多为你已损失的体力值数张），然后将剩余的牌以任意顺序置于牌堆底。","鸟栖于林，龙潜于渊。 / 游鱼惊钓，潜龙飞天。"],
-["忿肆","锁定技，准备阶段，你对一名体力值不小于你的角色造成1点伤害。若该角色不为你，其视为对你使用一张【杀】。","此贼之心，路人皆知！ / 孤君烈忿，怒愈秋霜。"],
-["决讨","限定技，出牌阶段开始时，若你的体力值为1，你可以选择一名角色，依次使用牌堆底的牌直到不能使用为止（只能指定你或该角色为目标）。","登车拔剑起，奋跃搏乱臣。 / 陵云决心意，登辇讨不臣。"],
-["助势","主公技，每名其他魏势力的角色的回合限一次，当该角色回复体力时，其可以令你摸一张牌。","可有爱卿愿助朕讨贼？ / 泱泱大魏，忠臣俱亡乎？"]];
-const MAO_TAGS=["潜龙","忿肆","决讨","助势"];
-let maoS={p:0};
-try{maoS=JSON.parse(localStorage.getItem("caomao_state_v1")||"{\"p\":0}")}catch(e){}
-function maoSave(){try{localStorage.setItem("caomao_state_v1",JSON.stringify(maoS))}catch(e){}}
+const MAO_TH=[25,50,75,99];
+const MAO=[["清正","持恒技，出牌阶段开始时，你可以弃置手牌中一种花色的所有牌，并观看一名有手牌的其他角色的手牌，弃置其中一种花色的所有牌，若其被弃置的牌数小于你弃置的牌数，你对其造成1点伤害。","朕虽不德，昧于大道，思与宇内共臻兹路。 / 愿遵前人教诲，为一国明帝贤君。"],
+["酒诗","持恒技，①当你需要使用【酒】时，若你的武将牌正面朝上，你可以翻面，视为使用一张【酒】；②当你受到伤害后，若你的武将牌背面朝上且于受到此伤害时也背面朝上，你可以翻面；③当你翻面后，你从牌堆中随机获得一张锦囊牌。","心忿无所表，下笔即成篇。 / 气幽但求醉，醒后寻复来。"],
+["放逐","持恒技，出牌阶段限一次，你可以选择一名其他角色并选择一项令其执行之（不能选择上次发动此技能时选择的目标角色）：1.所有技能失效直到其下回合结束；2.不能使用除锦囊牌以外的手牌直到其下回合结束。","卿当竭命纳忠，何为此逾矩之举！ / 朕继文帝风流，亦当效其权略。"],
+["决进","持恒技，限定技，出牌阶段，你可以令所有角色依次将体力值调整为1点体力并获得X点护甲（X为其以此调整减少的体力值，护甲值上限为5；你以此法获得的护甲值+2），然后令场上获得“向死存魏”光环效果（将牌堆、弃牌堆、场上、所有角色的【闪】、【桃】、【酒】移出游戏）。","朕宁拼一死，逆贼安敢一战！ / 朕安可坐受废辱，今日当与卿自出讨之！"]];
+const MAO_TAGS=["清正","酒诗","放逐","决进"];
+const MAO_CORE=[["潜龙","持恒技，①游戏开始时，你获得20点“道心”值（你至多拥有99点“道心”值）；②当你：1.受到1点伤害后，你获得10点“道心”值；2.造成1点伤害后，你获得15点“道心”值；3.获得牌时，你获得5点“道心”值；③若你拥有的“道心”值不小于：25点，你获得技能“清正”；50点，你获得技能“酒诗”；75点，你获得技能“放逐”；99点，你获得技能“决进”。","朕为天子，岂忍威权日去！ / 权臣震主，竟视天子于无物！ / 假以时日，必讨司马一族！"],
+["卫统","主公技，游戏开始时，若场上有其他魏势力角色且你拥有“潜龙”，则你因“潜龙”于游戏开始时获得的“道心”值修改为60。","手无实权难卫统，朦胧成睡，睡去还惊。"]];
+(function(){var el=document.getElementById("maoCore"),hh="";
+ for(var q=0;q<MAO_CORE.length;q++){var c=MAO_CORE[q];
+  hh+='<div class="wycard"><div class="w-src">曹髦 · 魏 · 3勾玉 · '+(q===0?"核心持恒技":"主公技")+'</div><div class="w-name">【'+c[0]+'】</div><div class="w-desc">'+c[1]+'</div><div class="w-talk">台词：'+c[2]+'</div></div>';
+ } el.innerHTML=hh;})();
+let maoS={v:0};
+try{var ms=JSON.parse(localStorage.getItem("caomao_state_v2")||"{\"v\":0}"); if(typeof ms.v==="number") maoS.v=Math.max(0,Math.min(99,ms.v));}catch(e){}
+function maoSave(){try{localStorage.setItem("caomao_state_v2",JSON.stringify(maoS))}catch(e){}}
+function maoUnlockCount(){var c=0;for(var i=0;i<MAO_TH.length;i++){if(maoS.v>=MAO_TH[i])c++;}return c;}
 const maoBar=document.getElementById("maoBar");
-(function(){for(let i=0;i<4;i++){const n=document.createElement("i");n.className="mao-node";n.dataset.i=i;n.style.left=(25*(i+1))+"%";n.innerHTML="？<span class=\"mao-tag\">"+MAO_TAGS[i]+"</span>";maoBar.appendChild(n);}})();
+(function(){for(let i=0;i<4;i++){const n=document.createElement("i");n.className="mao-node";n.dataset.i=i;n.style.left=Math.round(MAO_TH[i]/99*100)+"%";n.innerHTML="？<span class=\"mao-tag\">"+MAO_TAGS[i]+"@"+MAO_TH[i]+"</span>";maoBar.appendChild(n);}})();
 function maoSpark(node){for(let k=0;k<12;k++){const s=document.createElement("span");s.className="mao-spark";const a=Math.random()*Math.PI*2,d=26+Math.random()*30;s.style.left=node.style.left;s.style.top="50%";s.style.setProperty("--dx",(Math.cos(a)*d)+"px");s.style.setProperty("--dy",(Math.sin(a)*d)+"px");maoBar.appendChild(s);setTimeout(()=>s.remove(),900);}}
 function maoRender(burstIdx){
-  const p=maoS.p;
-  document.getElementById("maoFill").style.width=(p*25)+"%";
-  document.getElementById("maoNum").textContent="道心 "+(p*25)+" / 100";
-  maoBar.classList.toggle("mao-full",p>=4);
+  const v=maoS.v, un=maoUnlockCount();
+  document.getElementById("maoFill").style.width=Math.round(v/99*100)+"%";
+  document.getElementById("maoNum").textContent="道心 "+v+" / 99";
+  maoBar.classList.toggle("mao-full",v>=99);
   document.querySelectorAll(".mao-node").forEach(function(n){
-    const i=+n.dataset.i, on=i<p;
+    const i=+n.dataset.i, on=i<un;
     n.classList.toggle("on",on);
     if(on) n.firstChild.textContent=MAO_TAGS[i][0]; else n.firstChild.textContent="？";
     if(i===burstIdx){n.classList.remove("burst");void n.offsetWidth;n.classList.add("burst");maoSpark(n);}
   });
-  document.getElementById("maoCult").disabled=(p>=4);
-  document.getElementById("maoCult").textContent=(p>=4)?"四技合一":"潜修 +25";
-  if(p>=4)document.getElementById("maoStatus").textContent="潜龙飞天，四技俱全 —— 宁作高贵乡公死，不作汉献帝生。";
+  const full=(v>=99);
+  ["maoDeal","maoTake","maoCard"].forEach(function(id){document.getElementById(id).disabled=full;});
+  document.getElementById("maoStatus").textContent=full?"四技俱全，决进已得 —— 宁作高贵乡公死，不作汉献帝生。":"道心 "+v+" · 已得技能 "+un+"/4";
 }
-document.getElementById("maoCult").addEventListener("click",function(){
-  if(maoS.p>=4)return;
-  const at=maoS.p; maoS.p++; maoSave(); maoRender(at);
-  if(maoS.p<4)document.getElementById("maoStatus").textContent="道心初成【"+MAO_TAGS[maoS.p-1]+"】，点节点可观秘籍";
-});
+function maoAdd(g,label){
+  const before=maoUnlockCount();
+  maoS.v=Math.min(99,maoS.v+g); maoSave();
+  const after=maoUnlockCount();
+  maoRender(after>before?after-1:-1);
+  if(after>before){document.getElementById("maoStatus").textContent=(maoS.v>=99)?"四技俱全，决进已得 —— 宁作高贵乡公死，不作汉献帝生。":"道心至"+MAO_TH[after-1]+"，获得【"+MAO_TAGS[after-1]+"】——点节点观秘籍";return;}
+  if(maoS.v>=99)return;
+  const need=MAO_TH[Math.min(before,3)];
+  document.getElementById("maoStatus").textContent=label+" · 道心 "+maoS.v+"/99"+(before<4&&maoS.v<99?"（差"+(need-maoS.v)+"点亮下一技）":"");
+}
+document.getElementById("maoDeal").addEventListener("click",function(){maoAdd(15,"造伤+15");});
+document.getElementById("maoTake").addEventListener("click",function(){maoAdd(10,"受伤+10");});
+document.getElementById("maoCard").addEventListener("click",function(){maoAdd(5,"得牌+5");});
 document.addEventListener("click",function(e){
   const n=e.target.closest(".mao-node"); if(!n)return;
   const i=+n.dataset.i;
-  if(i>=maoS.p){document.getElementById("maoStatus").textContent="道心未至【"+MAO_TAGS[i]+"】——尚需潜修";return;}
-  document.getElementById("maoPopSrc").textContent="曹髦 · 魏 · 3/4 · 第"+(i+1)+"段道心";
+  if(i>=maoUnlockCount()){document.getElementById("maoStatus").textContent="道心未至"+MAO_TH[i]+"，【"+MAO_TAGS[i]+"】尚未解锁";return;}
+  document.getElementById("maoPopSrc").textContent="曹髦 · 魏 · 3勾玉 · 道心"+MAO_TH[i]+"解锁 · 第"+(i+1)+"技";
   document.getElementById("maoPopName").textContent=MAO[i][0];
   document.getElementById("maoPopDesc").textContent=MAO[i][1];
   document.getElementById("maoPopTalk").textContent="台词："+MAO[i][2];
@@ -668,7 +699,7 @@ document.addEventListener("click",function(e){
 });
 document.getElementById("maoPopClose").addEventListener("click",function(){document.getElementById("maoMask").classList.add("hidden")});
 document.getElementById("maoMask").addEventListener("click",function(e){if(e.target===this)this.classList.add("hidden")});
-document.getElementById("maoReset").addEventListener("click",function(){maoS={p:0};maoSave();maoRender(-1);document.getElementById("maoStatus").textContent="龙潜于渊，道心未启"});
+document.getElementById("maoReset").addEventListener("click",function(){maoS={v:0};maoSave();maoRender(-1);document.getElementById("maoStatus").textContent="龙潜于渊，道心未启"});
 maoRender(-1);
 </script>
 </body>
