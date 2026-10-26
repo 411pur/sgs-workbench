@@ -129,9 +129,14 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <div class="home-card blue" data-go="mao">
     <div class="h-icon">髦</div>
     <div class="h-title">曹髦 · 道心</div>
-    <div class="h-desc">魏 · 3勾玉 · 向死存魏<br>潜龙攒道心，25/50/75/99 解锁清正·酒诗·放逐·决进<br>主公卫统，开局道心六十</div>
+    <div class="h-desc">魏 · 3勾玉 · 向死存魏<br>道心值 25/50/75/99 解锁<br>清正·酒诗·放逐·决进</div>
   </div>
-<div class="home-card blue" data-go="xuxu">
+<div class="home-card gold" data-go="youzhuge">
+    <div class="h-icon">策</div>
+    <div class="h-title">友诸葛 · 卧龙演策</div>
+    <div class="h-desc">群 · 龙骧九天 · 老友季<br>预测接下来每张牌的类别或颜色并验证<br>预测盘可玩：全中+1、全错-1，上限7</div>
+  </div>
+  <div class="home-card blue" data-go="xuxu">
   <div class="h-icon">囊</div>
   <div class="h-title">荀彧&荀攸 · 智囊</div>
   <div class="h-desc">谋定天下 · 魏 · WEI013&020 · 地主专属<br>线上规则：用锦囊/装备各获一个含"谋"技能，至多2个<br>技能池 80 个（名 14 + 词 66）· 获得即附技能描述与台词</div>
@@ -244,11 +249,7 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 
 <!-- 曹髦·道心视图 -->
 <div id="view-mao" class="hidden">
-<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>向死存魏 · 曹髦</h1><div class="vsub">曹髦 — 魏 · 3勾玉 — 三国杀移动版《龙血玄黄》 · 别名草帽<br>【潜龙】持恒技攒"道心"值（至多99），道心不小于 25/50/75/99 时依次获得技能：清正 → 酒诗 → 放逐 → 决进；【卫统】主公技，开局道心改为60。点击已点亮节点查看技能全文。</div></div></div>
-<section class="panel">
-  <h2>本体技能</h2>
-  <div id="maoCore"></div>
-</section>
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>向死存魏 · 曹髦</h1><div class="vsub">曹髦 — 魏 · 3勾玉 — 移动版《龙血玄黄》 · 别名草帽<br>【道心】至多99点：造伤+15 / 受伤+10 / 得牌+5；道心不小于 25/50/75/99 时依次解锁 清正 → 酒诗 → 放逐 → 决进。点击已点亮节点查看技能全文。</div></div></div>
 <section class="panel">
 <h2>道心 · 进度条</h2>
 <div class="mao-num" id="maoNum">道心 0 / 99</div>
@@ -268,6 +269,38 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <button class="ghost" id="maoPopClose">合卷</button></div></div>
 <footer>阵亡：纵不成身死，朕亦为太祖子孙，大魏君王…… · 胜利：少康诛寒浞以中兴，朕夷司马，未尝不可！</footer>
 </div>
+<!-- 友诸葛·卧龙演策视图 -->
+<div id="view-youzhuge" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>龙骧九天 · 友诸葛亮</h1><div class="vsub">友诸葛亮 — 群 · “老友季”友系列武将 · 称号龙骧九天<br>【演策】以“卧龙演策”预测接下来使用的牌：为每张牌声明类别或颜色，验证后按命中的预测数量结算收益；【方遒】展示预测可让结算值+1；【共砺】与友庞统、友徐庶同阵另有增益。</div></div></div>
+<section class="panel">
+  <h2>技能全文</h2>
+  <div id="yzgCore"></div>
+</section>
+<section class="panel">
+  <h2>卧龙演策 · 预测盘</h2>
+  <div class="toolbar">
+    <span class="stat">可预测牌数</span>
+    <button id="yzgMinus" class="ghost">−</button>
+    <span id="yzgN" style="font-size:19px;color:#8a1f1f;font-weight:bold;min-width:24px;text-align:center">3</span>
+    <button id="yzgPlus" class="ghost">＋</button>
+    <span class="stat">上限 7</span>
+  </div>
+  <div class="toolbar">
+    <label class="rad"><input type="checkbox" id="yzgPang"> 友庞统在场（可预测数+1）</label>
+    <label class="rad"><input type="checkbox" id="yzgXu"> 友徐庶在场（首张视为正确）</label>
+    <label class="rad"><input type="checkbox" id="yzgFang"> 方遒：展示预测（结算值+1）</label>
+  </div>
+  <div id="yzgSlots"></div>
+  <div class="toolbar">
+    <button id="yzgRoll" class="ghost">随机预测</button>
+    <button id="yzgVerify">验证预测</button>
+    <button id="yzgReset" class="ghost">重置本局</button>
+  </div>
+  <div id="yzgResult" class="stat" style="line-height:2"></div>
+</section>
+<footer>牌序为模拟（基本45% / 锦囊30% / 装备25%，红黑各半）· 结算口径以牌面原文为准 · 阵亡：吾既得明主，纵不得良时，亦当全力一试。 · 胜利：鼎足之势若成，则将军中原可图也！</footer>
+</div>
+
 <!-- 随机数视图 -->
 <div id="view-xuxu" class="hidden">
 <div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>荀彧&荀攸 · 智囊</h1></div></div>
@@ -299,8 +332,8 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <script>
 /* ---------- 视图切换 ---------- */
 function go(v){
-  ["home","chen","hun","wuyi","quyuan","mao","xuxu","rng"].forEach(function(x){
-    document.getElementById("view-"+x).classList.toggle("hidden", x!==v);
+  document.querySelectorAll('[id^="view-"]').forEach(function(el){
+    el.classList.toggle("hidden", el.id!=="view-"+v);
   });
   window.scrollTo(0,0);
 }
@@ -624,6 +657,107 @@ document.getElementById("qHide").addEventListener("click",function(){
 });
 qRender();
 
+/* ---------- 友诸葛 · 卧龙演策 ---------- */
+const YZG=[
+["演策","每轮限一次，首轮开始时，或准备阶段，你可以选择一项：从牌堆中随机获得一张锦囊牌；执行“卧龙演策”。若你执行“卧龙演策”，当一张牌被使用时，若此牌的类别或颜色与你的预测相同，你摸一张牌（每次执行“卧龙演策”至多因此摸五张牌）。当本次“卧龙演策”的预测全部验证后，或当你再次执行“卧龙演策”时，若你本次“卧龙演策”正确的预测数量：为0，你失去1点体力，此后“卧龙演策”可预测的牌数-1；不足一半，你弃置两张牌；至少一半（向上取整），你根据本次预测的方式，从牌堆中获得一张符合你声明条件的牌；全部正确，你摸两张牌，此后“卧龙演策”可预测的牌数+1（至多为7）。","以今日之时局，唯以此策解之。"],
+["方遒","限定技，当你执行“卧龙演策”后，你可以展示你的“卧龙演策”预测，若如此做，本次“卧龙演策”的预测全部验证后，执行效果的值均+1，然后若卧龙演策预测的牌数大于3且预测全部正确，该技能可以再次发动。","一举可成之事，何必再增变数。"],
+["共砺","锁定技（身份模式无效，排位、斗地主可用）：若友庞统在场且与你阵营一致，你执行“卧龙演策”可预测的牌数+1；若友徐庶在场且与你阵营一致，你“卧龙演策”预测的第一张牌的结果视为正确。","奇志远期，当与诤友共进！"]];
+const YZG_CATS=["基本牌","锦囊牌","装备牌"], YZG_COLORS=["红","黑"];
+const YZG_KEY="youzhuge_v1";
+function yzgBase(){return {n:3,pang:false,xu:false,fang:false,pred:[],log:null};}
+let yzg=yzgBase();
+try{var ys=JSON.parse(localStorage.getItem(YZG_KEY)||"null"); if(ys&&typeof ys.n==="number"){yzg.n=Math.max(1,Math.min(7,ys.n));yzg.pang=!!ys.pang;yzg.xu=!!ys.xu;yzg.fang=!!ys.fang;}}catch(e){}
+function yzgSave(){try{localStorage.setItem(YZG_KEY,JSON.stringify({n:yzg.n,pang:yzg.pang,xu:yzg.xu,fang:yzg.fang}))}catch(e){}}
+function yzgEffN(){return Math.max(1,Math.min(7,yzg.n+(yzg.pang?1:0)));}
+(function(){var el=document.getElementById("yzgCore"),hh="";
+ for(var q=0;q<YZG.length;q++){var c=YZG[q];
+  hh+='<div class="wycard"><div class="w-src">友诸葛亮 · 群 · 龙骧九天</div><div class="w-name">【'+c[0]+'】</div><div class="w-desc">'+c[1]+'</div><div class="w-talk">台词：'+c[2]+'</div></div>';
+ } el.innerHTML=hh;})();
+function yzgSlotsRender(){
+  var N=yzgEffN(),el=document.getElementById("yzgSlots"),hh="";
+  while(yzg.pred.length<N) yzg.pred.push({cat:0,color:0});
+  yzg.pred.length=N;
+  for(var i=0;i<N;i++){
+    var pr=yzg.pred[i],rev=(yzg.log&&yzg.log.cards&&yzg.log.cards[i]);
+    var mark="";
+    if(rev){mark=' <span style="color:'+(rev.hit?'#1f7a1f':'#8a1f1f')+'">'+(rev.hit?"✔ ":"✘ ")+rev.txt+(rev.hit?" 命中":" 未中")+(rev.xuNote?"（共砺）":"")+'</span>';}
+    hh+='<div class="slot filled" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'+
+      '<b style="color:#8a1f1f">第'+(i+1)+'张</b>'+
+      '<button class="ghost yzgCat" data-i="'+i+'">类别：'+YZG_CATS[pr.cat]+'</button>'+
+      '<button class="ghost yzgCol" data-i="'+i+'">颜色：'+YZG_COLORS[pr.color]+'</button>'+
+      mark+'</div>';
+  }
+  el.innerHTML=hh;
+  document.getElementById("yzgN").textContent=yzgEffN();
+  document.getElementById("yzgMinus").disabled=(yzg.n<=1);
+  document.getElementById("yzgPlus").disabled=(yzg.n>=7);
+  var allset=yzg.pred.every(function(x){return typeof x.cat==="number"&&typeof x.color==="number";});
+  document.getElementById("yzgVerify").disabled=!allset;
+}
+function yzgSettle(){
+  var N=yzgEffN();
+  var cards=[];
+  for(var i=0;i<N;i++){
+    var r=Math.random(), cat = r<0.45?0:(r<0.75?1:2);
+    var col = Math.random()<0.5?0:1;
+    var predI=yzg.pred[i]||{cat:0,color:0};
+    var catHit=(predI.cat===cat), colHit=(predI.color===col);
+    var hit=(catHit||colHit), xuNote=false;
+    if(i===0&&yzg.xu&&!hit){hit=true;xuNote=true;}
+    cards.push({cat:cat,col:col,catHit:catHit,colHit:colHit,hit:hit,xuNote:xuNote,
+      txt:YZG_CATS[cat]+'·'+YZG_COLORS[col]+(hit?((catHit?'✔类别':'')+(colHit?'✔颜色':'')):'')});
+  }
+  var correct=cards.filter(function(c){return c.hit;}).length;
+  var draws=Math.min(5,correct);
+  var bonus=yzg.fang?1:0;
+  var half=Math.ceil(N/2), lines=[];
+  lines.push('本次预测 '+N+' 张：命中 '+correct+' 张，'+(correct>0?('按【演策】因此摸 '+draws+' 张牌'):'无摸牌'));
+  if(correct===0){
+    yzg.n=Math.max(1,yzg.n-1);
+    lines.push('结算：正确数为 0 —— 你失去1点体力，此后“卧龙演策”可预测的牌数 -1（现 '+yzg.n+'）');
+  }else if(correct<half){
+    lines.push('结算：正确数不足一半（需 '+half+'）—— 你弃置 '+(2+bonus)+' 张牌'+(bonus?'（方遒+1）':''));
+  }else if(correct<N){
+    lines.push('结算：正确数至少一半（'+correct+'/'+N+'）—— 你从牌堆中获得 '+(1+bonus)+' 张符合声明条件的牌'+(bonus?'（方遒+1）':''));
+  }else{
+    yzg.n=Math.min(7,yzg.n+1);
+    lines.push('结算：全部正确 —— 你摸 '+(2+bonus)+' 张牌'+(bonus?'（方遒+1）':'')+'，此后“卧龙演策”可预测的牌数 +1（现 '+yzg.n+'）');
+    if(yzg.fang&&N>3) lines.push('【方遒】预测数大于3且全部正确 —— 该限定技可以再次发动');
+  }
+  yzg.log={cards:cards};
+  yzgSave();
+  document.getElementById("yzgResult").innerHTML=lines.join('<br>');
+  yzgSlotsRender();
+}
+function yzgRenderClear(){document.getElementById("yzgResult").innerHTML='';}
+document.getElementById("yzgMinus").addEventListener("click",function(){if(yzg.n>1){yzg.n--;yzg.log=null;yzgSave();yzgRenderClear();yzgSlotsRender();}});
+document.getElementById("yzgPlus").addEventListener("click",function(){if(yzg.n<7){yzg.n++;yzg.log=null;yzgSave();yzgRenderClear();yzgSlotsRender();}});
+document.getElementById("yzgPang").addEventListener("change",function(){yzg.pang=this.checked;yzg.log=null;yzgSave();yzgSlotsRender();});
+document.getElementById("yzgXu").addEventListener("change",function(){yzg.xu=this.checked;yzgSave();});
+document.getElementById("yzgFang").addEventListener("change",function(){yzg.fang=this.checked;yzgSave();});
+document.getElementById("yzgRoll").addEventListener("click",function(){
+  var N=yzgEffN(); yzg.pred=[];
+  for(var i=0;i<N;i++) yzg.pred.push({cat:Math.floor(Math.random()*3),color:Math.floor(Math.random()*2)});
+  yzg.log=null; yzgRenderClear(); yzgSlotsRender();
+});
+document.getElementById("yzgVerify").addEventListener("click",yzgSettle);
+document.getElementById("yzgReset").addEventListener("click",function(){
+  yzg=yzgBase(); yzgSave();
+  document.getElementById("yzgPang").checked=false; document.getElementById("yzgXu").checked=false; document.getElementById("yzgFang").checked=false;
+  yzgRenderClear(); yzgSlotsRender();
+});
+document.getElementById("yzgSlots").addEventListener("click",function(e){
+  var c=e.target.closest(".yzgCat"), col=e.target.closest(".yzgCol"); if(!c&&!col)return;
+  var i=+(c?c.dataset.i:col.dataset.i);
+  if(c) yzg.pred[i].cat=(yzg.pred[i].cat+1)%3;
+  if(col) yzg.pred[i].color=(yzg.pred[i].color+1)%2;
+  yzg.log=null; yzgRenderClear(); yzgSlotsRender();
+});
+document.getElementById("yzgPang").checked=yzg.pang;
+document.getElementById("yzgXu").checked=yzg.xu;
+document.getElementById("yzgFang").checked=yzg.fang;
+yzgSlotsRender();
+
 /* ---------- 随机数生成 ---------- */
 const rngHist=[];
 function genRand(){
@@ -657,12 +791,6 @@ const MAO=[["清正","持恒技，出牌阶段开始时，你可以弃置手牌�
 ["放逐","持恒技，出牌阶段限一次，你可以选择一名其他角色并选择一项令其执行之（不能选择上次发动此技能时选择的目标角色）：1.所有技能失效直到其下回合结束；2.不能使用除锦囊牌以外的手牌直到其下回合结束。","卿当竭命纳忠，何为此逾矩之举！ / 朕继文帝风流，亦当效其权略。"],
 ["决进","持恒技，限定技，出牌阶段，你可以令所有角色依次将体力值调整为1点体力并获得X点护甲（X为其以此调整减少的体力值，护甲值上限为5；你以此法获得的护甲值+2），然后令场上获得“向死存魏”光环效果（将牌堆、弃牌堆、场上、所有角色的【闪】、【桃】、【酒】移出游戏）。","朕宁拼一死，逆贼安敢一战！ / 朕安可坐受废辱，今日当与卿自出讨之！"]];
 const MAO_TAGS=["清正","酒诗","放逐","决进"];
-const MAO_CORE=[["潜龙","持恒技，①游戏开始时，你获得20点“道心”值（你至多拥有99点“道心”值）；②当你：1.受到1点伤害后，你获得10点“道心”值；2.造成1点伤害后，你获得15点“道心”值；3.获得牌时，你获得5点“道心”值；③若你拥有的“道心”值不小于：25点，你获得技能“清正”；50点，你获得技能“酒诗”；75点，你获得技能“放逐”；99点，你获得技能“决进”。","朕为天子，岂忍威权日去！ / 权臣震主，竟视天子于无物！ / 假以时日，必讨司马一族！"],
-["卫统","主公技，游戏开始时，若场上有其他魏势力角色且你拥有“潜龙”，则你因“潜龙”于游戏开始时获得的“道心”值修改为60。","手无实权难卫统，朦胧成睡，睡去还惊。"]];
-(function(){var el=document.getElementById("maoCore"),hh="";
- for(var q=0;q<MAO_CORE.length;q++){var c=MAO_CORE[q];
-  hh+='<div class="wycard"><div class="w-src">曹髦 · 魏 · 3勾玉 · '+(q===0?"核心持恒技":"主公技")+'</div><div class="w-name">【'+c[0]+'】</div><div class="w-desc">'+c[1]+'</div><div class="w-talk">台词：'+c[2]+'</div></div>';
- } el.innerHTML=hh;})();
 let maoS={v:0};
 try{var ms=JSON.parse(localStorage.getItem("caomao_state_v2")||"{\"v\":0}"); if(typeof ms.v==="number") maoS.v=Math.max(0,Math.min(99,ms.v));}catch(e){}
 function maoSave(){try{localStorage.setItem("caomao_state_v2",JSON.stringify(maoS))}catch(e){}}
