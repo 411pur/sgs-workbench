@@ -271,13 +271,9 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 </div>
 <!-- 友诸葛·卧龙演策视图 -->
 <div id="view-youzhuge" class="hidden">
-<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>龙骧九天 · 友诸葛亮</h1><div class="vsub">友诸葛亮 — 群 · “老友季”友系列武将 · 称号龙骧九天<br>【演策】以“卧龙演策”预测接下来使用的牌：为每张牌声明类别或颜色，验证后按命中的预测数量结算收益；【方遒】展示预测可让结算值+1；【共砺】与友庞统、友徐庶同阵另有增益。</div></div></div>
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>友诸葛亮 · 卧龙演策</h1><div class="vsub">群 · 龙骧九天 —— 技能在牌上，这里只做线下算不清的：登记预测 → 逐张录入实际使用的牌 → 自动判定命中与结算（含预测数浮动、方遒加成、共砺增益）。</div></div></div>
 <section class="panel">
-  <h2>技能全文</h2>
-  <div id="yzgCore"></div>
-</section>
-<section class="panel">
-  <h2>卧龙演策 · 预测盘</h2>
+  <h2>① 声明预测</h2>
   <div class="toolbar">
     <span class="stat">可预测牌数</span>
     <button id="yzgMinus" class="ghost">−</button>
@@ -286,19 +282,33 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
     <span class="stat">上限 7</span>
   </div>
   <div class="toolbar">
-    <label class="rad"><input type="checkbox" id="yzgPang"> 友庞统在场（可预测数+1）</label>
-    <label class="rad"><input type="checkbox" id="yzgXu"> 友徐庶在场（首张视为正确）</label>
-    <label class="rad"><input type="checkbox" id="yzgFang"> 方遒：展示预测（结算值+1）</label>
+    <label class="rad"><input type="checkbox" id="yzgPang"> 友庞统在场（预测数+1）</label>
+    <label class="rad"><input type="checkbox" id="yzgXu"> 友徐庶在场（首张视为命中）</label>
+    <label class="rad"><input type="checkbox" id="yzgFang"> 方遒：已展示预测（结算值+1）</label>
   </div>
   <div id="yzgSlots"></div>
+  <div class="toolbar"><button id="yzgRoll" class="ghost">随机预测</button><span class="stat">每张牌两个按钮轮转选择「类别 × 颜色」</span></div>
+</section>
+<section class="panel">
+  <h2>② 对局录入（逐张判定）</h2>
+  <div class="toolbar"><span class="stat">已录入 <b id="yzgIdx">0</b> / <b id="yzgTot">3</b> 张 · 已命中 <b id="yzgHit">0</b></span></div>
   <div class="toolbar">
-    <button id="yzgRoll" class="ghost">随机预测</button>
-    <button id="yzgVerify">验证预测</button>
+    <span class="stat">这张牌是</span>
+    <button class="ghost yzgInCat" data-cat="0">基本牌</button>
+    <button class="ghost yzgInCat" data-cat="1">锦囊牌</button>
+    <button class="ghost yzgInCat" data-cat="2">装备牌</button>
+    <button class="ghost yzgInCol" data-col="0">红</button>
+    <button class="ghost yzgInCol" data-col="1">黑</button>
+    <button id="yzgEnter">录入这张</button>
+    <button id="yzgUndo" class="ghost">撤销上一张</button>
+  </div>
+  <div class="toolbar">
+    <button id="yzgSim" class="ghost">随机模拟跑满</button>
     <button id="yzgReset" class="ghost">重置本局</button>
   </div>
   <div id="yzgResult" class="stat" style="line-height:2"></div>
 </section>
-<footer>牌序为模拟（基本45% / 锦囊30% / 装备25%，红黑各半）· 结算口径以牌面原文为准 · 阵亡：吾既得明主，纵不得良时，亦当全力一试。 · 胜利：鼎足之势若成，则将军中原可图也！</footer>
+<footer>牌面技能以实体武将牌为准，此处不重复收录 · 录入满 n 张自动结算 · 全中预测数+1、全错-1（上限7）</footer>
 </div>
 
 <!-- 随机数视图 -->
@@ -657,101 +667,120 @@ document.getElementById("qHide").addEventListener("click",function(){
 });
 qRender();
 
-/* ---------- 友诸葛 · 卧龙演策 ---------- */
-const YZG=[
-["演策","每轮限一次，首轮开始时，或准备阶段，你可以选择一项：从牌堆中随机获得一张锦囊牌；执行“卧龙演策”。若你执行“卧龙演策”，当一张牌被使用时，若此牌的类别或颜色与你的预测相同，你摸一张牌（每次执行“卧龙演策”至多因此摸五张牌）。当本次“卧龙演策”的预测全部验证后，或当你再次执行“卧龙演策”时，若你本次“卧龙演策”正确的预测数量：为0，你失去1点体力，此后“卧龙演策”可预测的牌数-1；不足一半，你弃置两张牌；至少一半（向上取整），你根据本次预测的方式，从牌堆中获得一张符合你声明条件的牌；全部正确，你摸两张牌，此后“卧龙演策”可预测的牌数+1（至多为7）。","以今日之时局，唯以此策解之。"],
-["方遒","限定技，当你执行“卧龙演策”后，你可以展示你的“卧龙演策”预测，若如此做，本次“卧龙演策”的预测全部验证后，执行效果的值均+1，然后若卧龙演策预测的牌数大于3且预测全部正确，该技能可以再次发动。","一举可成之事，何必再增变数。"],
-["共砺","锁定技（身份模式无效，排位、斗地主可用）：若友庞统在场且与你阵营一致，你执行“卧龙演策”可预测的牌数+1；若友徐庶在场且与你阵营一致，你“卧龙演策”预测的第一张牌的结果视为正确。","奇志远期，当与诤友共进！"]];
+/* ---------- 友诸葛 · 卧龙演策（对局记录器） ---------- */
 const YZG_CATS=["基本牌","锦囊牌","装备牌"], YZG_COLORS=["红","黑"];
 const YZG_KEY="youzhuge_v1";
-function yzgBase(){return {n:3,pang:false,xu:false,fang:false,pred:[],log:null};}
+function yzgBase(){return {n:3,pang:false,xu:false,fang:false,pred:[],entered:[],entry:{cat:null,col:null},log:null};}
 let yzg=yzgBase();
-try{var ys=JSON.parse(localStorage.getItem(YZG_KEY)||"null"); if(ys&&typeof ys.n==="number"){yzg.n=Math.max(1,Math.min(7,ys.n));yzg.pang=!!ys.pang;yzg.xu=!!ys.xu;yzg.fang=!!ys.fang;}}catch(e){}
+try{var ys=JSON.parse(localStorage.getItem(YZG_KEY)||"null");
+  if(ys&&typeof ys.n==="number"){yzg.n=Math.max(1,Math.min(7,ys.n));yzg.pang=!!ys.pang;yzg.xu=!!ys.xu;yzg.fang=!!ys.fang;}}catch(e){}
 function yzgSave(){try{localStorage.setItem(YZG_KEY,JSON.stringify({n:yzg.n,pang:yzg.pang,xu:yzg.xu,fang:yzg.fang}))}catch(e){}}
 function yzgEffN(){return Math.max(1,Math.min(7,yzg.n+(yzg.pang?1:0)));}
-(function(){var el=document.getElementById("yzgCore"),hh="";
- for(var q=0;q<YZG.length;q++){var c=YZG[q];
-  hh+='<div class="wycard"><div class="w-src">友诸葛亮 · 群 · 龙骧九天</div><div class="w-name">【'+c[0]+'】</div><div class="w-desc">'+c[1]+'</div><div class="w-talk">台词：'+c[2]+'</div></div>';
- } el.innerHTML=hh;})();
+function yzgJudge(card,idx){
+  var predI=yzg.pred[idx]||{cat:0,color:0};
+  var catHit=(predI.cat===card.cat), colHit=(predI.color===card.col);
+  var hit=(catHit||colHit), xuNote=false;
+  if(idx===0&&yzg.xu&&!hit){hit=true;xuNote=true;}
+  return {cat:card.cat,col:card.col,catHit:catHit,colHit:colHit,hit:hit,xuNote:xuNote,
+    txt:YZG_CATS[card.cat]+'·'+YZG_COLORS[card.col]+(catHit?'✔类别':'')+(colHit?'✔颜色':'')};
+}
 function yzgSlotsRender(){
-  var N=yzgEffN(),el=document.getElementById("yzgSlots"),hh="";
+  var N=yzgEffN();
   while(yzg.pred.length<N) yzg.pred.push({cat:0,color:0});
   yzg.pred.length=N;
+  var el=document.getElementById("yzgSlots"),hh="";
   for(var i=0;i<N;i++){
-    var pr=yzg.pred[i],rev=(yzg.log&&yzg.log.cards&&yzg.log.cards[i]);
-    var mark="";
-    if(rev){mark=' <span style="color:'+(rev.hit?'#1f7a1f':'#8a1f1f')+'">'+(rev.hit?"✔ ":"✘ ")+rev.txt+(rev.hit?" 命中":" 未中")+(rev.xuNote?"（共砺）":"")+'</span>';}
+    var pr=yzg.pred[i], done=(i<yzg.entered.length), res=done?yzgJudge(yzg.entered[i],i):null;
+    var mark=done?(' <span style="color:'+(res.hit?'#1a7f37':'#8a1f1f')+'">'+(res.hit?'✔ ':'✘ ')+res.txt+(res.xuNote?'（共砺视为命中）':(res.hit?' 命中':' 未中'))+'</span>'):'';
     hh+='<div class="slot filled" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'+
       '<b style="color:#8a1f1f">第'+(i+1)+'张</b>'+
-      '<button class="ghost yzgCat" data-i="'+i+'">类别：'+YZG_CATS[pr.cat]+'</button>'+
-      '<button class="ghost yzgCol" data-i="'+i+'">颜色：'+YZG_COLORS[pr.color]+'</button>'+
-      mark+'</div>';
+      '<button class="ghost yzgCat" data-i="'+i+'"'+(done?' disabled':'')+'>类别：'+YZG_CATS[pr.cat]+'</button>'+
+      '<button class="ghost yzgCol" data-i="'+i+'"'+(done?' disabled':'')+'>颜色：'+YZG_COLORS[pr.color]+'</button>'+mark+'</div>';
   }
   el.innerHTML=hh;
   document.getElementById("yzgN").textContent=yzgEffN();
-  document.getElementById("yzgMinus").disabled=(yzg.n<=1);
-  document.getElementById("yzgPlus").disabled=(yzg.n>=7);
-  var allset=yzg.pred.every(function(x){return typeof x.cat==="number"&&typeof x.color==="number";});
-  document.getElementById("yzgVerify").disabled=!allset;
+  document.getElementById("yzgMinus").disabled=(yzg.n<=1||yzg.entered.length>0);
+  document.getElementById("yzgPlus").disabled=(yzg.n>=7||yzg.entered.length>0);
+  document.getElementById("yzgIdx").textContent=yzg.entered.length;
+  document.getElementById("yzgTot").textContent=N;
+  document.getElementById("yzgHit").textContent=yzg.entered.filter(function(c,k){return yzgJudge(c,k).hit;}).length;
+  var catBtns=document.querySelectorAll(".yzgInCat"), colBtns=document.querySelectorAll(".yzgInCol");
+  catBtns.forEach(function(x){x.style.background=(+x.dataset.cat===yzg.entry.cat)?"#8a1f1f":"";x.style.color=(+x.dataset.cat===yzg.entry.cat)?"#fff":"";});
+  colBtns.forEach(function(x){x.style.background=(+x.dataset.col===yzg.entry.col)?"#8a1f1f":"";x.style.color=(+x.dataset.col===yzg.entry.col)?"#fff":"";});
+  document.getElementById("yzgEnter").disabled=!(yzg.entry.cat!==null&&yzg.entry.col!==null&&yzg.entered.length<N);
+  document.getElementById("yzgUndo").disabled=(yzg.entered.length===0);
 }
 function yzgSettle(){
-  var N=yzgEffN();
-  var cards=[];
-  for(var i=0;i<N;i++){
-    var r=Math.random(), cat = r<0.45?0:(r<0.75?1:2);
-    var col = Math.random()<0.5?0:1;
-    var predI=yzg.pred[i]||{cat:0,color:0};
-    var catHit=(predI.cat===cat), colHit=(predI.color===col);
-    var hit=(catHit||colHit), xuNote=false;
-    if(i===0&&yzg.xu&&!hit){hit=true;xuNote=true;}
-    cards.push({cat:cat,col:col,catHit:catHit,colHit:colHit,hit:hit,xuNote:xuNote,
-      txt:YZG_CATS[cat]+'·'+YZG_COLORS[col]+(hit?((catHit?'✔类别':'')+(colHit?'✔颜色':'')):'')});
-  }
+  var N=yzgEffN(), cards=[];
+  for(var i=0;i<yzg.entered.length;i++) cards.push(yzgJudge(yzg.entered[i],i));
   var correct=cards.filter(function(c){return c.hit;}).length;
-  var draws=Math.min(5,correct);
-  var bonus=yzg.fang?1:0;
-  var half=Math.ceil(N/2), lines=[];
-  lines.push('本次预测 '+N+' 张：命中 '+correct+' 张，'+(correct>0?('按【演策】因此摸 '+draws+' 张牌'):'无摸牌'));
+  var draws=Math.min(5,correct), bonus=yzg.fang?1:0, half=Math.ceil(N/2), lines=[];
+  var head=[];
+  for(var k=0;k<cards.length;k++) head.push('第'+(k+1)+'张 '+cards[k].txt+(cards[k].hit?' → 命中':' → 未中')+(cards[k].xuNote?'（共砺）':''));
+  if(head.length) lines.push(head.join('<br>'));
+  lines.push('预测 '+N+' 张 · 命中 '+correct+' 张'+(correct>0?('（按演策因此摸 '+draws+' 张牌，单次至多5）'):''));
   if(correct===0){
     yzg.n=Math.max(1,yzg.n-1);
-    lines.push('结算：正确数为 0 —— 你失去1点体力，此后“卧龙演策”可预测的牌数 -1（现 '+yzg.n+'）');
+    lines.push('结算：正确数为 0 —— 失去1点体力，此后可预测的牌数 −1（现 '+yzg.n+'）');
   }else if(correct<half){
-    lines.push('结算：正确数不足一半（需 '+half+'）—— 你弃置 '+(2+bonus)+' 张牌'+(bonus?'（方遒+1）':''));
+    lines.push('结算：正确数不足一半（需 '+half+'）—— 弃置 '+(2+bonus)+' 张牌'+(bonus?'（方遒+1）':''));
   }else if(correct<N){
-    lines.push('结算：正确数至少一半（'+correct+'/'+N+'）—— 你从牌堆中获得 '+(1+bonus)+' 张符合声明条件的牌'+(bonus?'（方遒+1）':''));
+    lines.push('结算：正确数至少一半 —— 获得 '+(1+bonus)+' 张符合声明条件的牌'+(bonus?'（方遒+1）':''));
   }else{
     yzg.n=Math.min(7,yzg.n+1);
-    lines.push('结算：全部正确 —— 你摸 '+(2+bonus)+' 张牌'+(bonus?'（方遒+1）':'')+'，此后“卧龙演策”可预测的牌数 +1（现 '+yzg.n+'）');
-    if(yzg.fang&&N>3) lines.push('【方遒】预测数大于3且全部正确 —— 该限定技可以再次发动');
+    lines.push('结算：全部正确 —— 摸 '+(2+bonus)+' 张牌'+(bonus?'（方遒+1）':'')+'，此后可预测的牌数 +1（现 '+yzg.n+'）');
+    if(yzg.fang&&N>3) lines.push('【方遒】预测数大于3且全部正确 —— 可再次发动');
   }
   yzg.log={cards:cards};
   yzgSave();
   document.getElementById("yzgResult").innerHTML=lines.join('<br>');
-  yzgSlotsRender();
 }
-function yzgRenderClear(){document.getElementById("yzgResult").innerHTML='';}
-document.getElementById("yzgMinus").addEventListener("click",function(){if(yzg.n>1){yzg.n--;yzg.log=null;yzgSave();yzgRenderClear();yzgSlotsRender();}});
-document.getElementById("yzgPlus").addEventListener("click",function(){if(yzg.n<7){yzg.n++;yzg.log=null;yzgSave();yzgRenderClear();yzgSlotsRender();}});
-document.getElementById("yzgPang").addEventListener("change",function(){yzg.pang=this.checked;yzg.log=null;yzgSave();yzgSlotsRender();});
-document.getElementById("yzgXu").addEventListener("change",function(){yzg.xu=this.checked;yzgSave();});
-document.getElementById("yzgFang").addEventListener("change",function(){yzg.fang=this.checked;yzgSave();});
+function yzgClearResult(){document.getElementById("yzgResult").innerHTML='';}
+document.getElementById("yzgMinus").addEventListener("click",function(){if(yzg.n>1&&yzg.entered.length===0){yzg.n--;yzgSave();yzgSlotsRender();}});
+document.getElementById("yzgPlus").addEventListener("click",function(){if(yzg.n<7&&yzg.entered.length===0){yzg.n++;yzgSave();yzgSlotsRender();}});
+document.getElementById("yzgPang").addEventListener("change",function(){yzg.pang=this.checked;yzg.entered=[];yzgClearResult();yzgSave();yzgSlotsRender();});
+document.getElementById("yzgXu").addEventListener("change",function(){yzg.xu=this.checked;yzg.entered=[];yzgClearResult();yzgSave();yzgSlotsRender();});
+document.getElementById("yzgFang").addEventListener("change",function(){yzg.fang=this.checked;yzg.entered=[];yzgClearResult();yzgSave();yzgSlotsRender();});
 document.getElementById("yzgRoll").addEventListener("click",function(){
   var N=yzgEffN(); yzg.pred=[];
   for(var i=0;i<N;i++) yzg.pred.push({cat:Math.floor(Math.random()*3),color:Math.floor(Math.random()*2)});
-  yzg.log=null; yzgRenderClear(); yzgSlotsRender();
+  yzg.entered=[]; yzg.entry={cat:null,col:null}; yzgClearResult(); yzgSlotsRender();
 });
-document.getElementById("yzgVerify").addEventListener("click",yzgSettle);
+document.getElementById("yzgEnter").addEventListener("click",function(){
+  var N=yzgEffN();
+  if(yzg.entry.cat===null||yzg.entry.col===null||yzg.entered.length>=N) return;
+  yzg.entered.push({cat:yzg.entry.cat,col:yzg.entry.col});
+  yzg.entry={cat:null,col:null};
+  if(yzg.entered.length===N){ yzgSlotsRender(); yzgSettle(); }
+  else { yzgClearResult(); yzgSlotsRender(); }
+});
+document.getElementById("yzgUndo").addEventListener("click",function(){
+  if(!yzg.entered.length) return;
+  yzg.entered.pop(); yzgClearResult(); yzgSlotsRender();
+});
+document.getElementById("yzgSim").addEventListener("click",function(){
+  var N=yzgEffN(); yzg.entered=[];
+  for(var i=0;i<N;i++){var r=Math.random(); yzg.entered.push({cat:(r<0.45?0:(r<0.75?1:2)),col:(Math.random()<0.5?0:1)});}
+  yzg.entry={cat:null,col:null}; yzgSlotsRender(); yzgSettle();
+});
 document.getElementById("yzgReset").addEventListener("click",function(){
   yzg=yzgBase(); yzgSave();
   document.getElementById("yzgPang").checked=false; document.getElementById("yzgXu").checked=false; document.getElementById("yzgFang").checked=false;
-  yzgRenderClear(); yzgSlotsRender();
+  yzgClearResult(); yzgSlotsRender();
 });
 document.getElementById("yzgSlots").addEventListener("click",function(e){
   var c=e.target.closest(".yzgCat"), col=e.target.closest(".yzgCol"); if(!c&&!col)return;
   var i=+(c?c.dataset.i:col.dataset.i);
+  if(i<yzg.entered.length) return;
   if(c) yzg.pred[i].cat=(yzg.pred[i].cat+1)%3;
   if(col) yzg.pred[i].color=(yzg.pred[i].color+1)%2;
-  yzg.log=null; yzgRenderClear(); yzgSlotsRender();
+  yzg.entered=[]; yzgClearResult(); yzgSlotsRender();
+});
+document.addEventListener("click",function(e){
+  var t=e.target.closest(".yzgInCat"), t2=e.target.closest(".yzgInCol"); if(!t&&!t2)return;
+  if(t) yzg.entry.cat=+t.dataset.cat;
+  if(t2) yzg.entry.col=+t2.dataset.col;
+  yzgSlotsRender();
 });
 document.getElementById("yzgPang").checked=yzg.pang;
 document.getElementById("yzgXu").checked=yzg.xu;
