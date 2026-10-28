@@ -141,6 +141,11 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <div class="h-title">荀彧&荀攸 · 智囊</div>
   <div class="h-desc">谋定天下 · 魏 · WEI013&020 · 地主专属<br>线上规则：用锦囊/装备各获一个含"谋"技能，至多2个<br>技能池 80 个（名 14 + 词 66）· 获得即附技能描述与台词</div>
 </div>
+<div class="home-card red" data-go="sujun">
+  <div class="h-icon">肃</div>
+  <div class="h-title">星曹仁 · 肃军判定器</div>
+  <div class="h-desc">整肃三军 · 魏 · 使用牌时手牌构成判定<br>基本牌/非基本牌实时计数 · 平衡即亮灯<br>使用牌自动结算摸二 · 线下最易数错，此页代劳</div>
+</div>
 <div class="home-card grey" data-go="rng">
     <div class="h-icon">数</div>
     <div class="h-title">随机数</div>
@@ -309,6 +314,39 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <div id="yzgResult" class="stat" style="line-height:2"></div>
 </section>
 <footer>牌面技能以实体武将牌为准，此处不重复收录 · 录入满 n 张自动结算 · 全中预测数+1、全错-1（上限7）</footer>
+</div>
+
+<!-- 肃军判定器视图 -->
+<div id="view-sujun" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>星曹仁 · 肃军判定器</h1></div></div>
+<div class="panel"><h2>判定条件（实体牌以武将牌为准）</h2><div style="font-size:13.5px;line-height:1.9">当你使用牌时，若你<b>手牌中基本牌与非基本牌的数量相等</b>，你可以摸两张牌。<br><span style="font-size:12.5px;color:#8a7a5e">基本牌＝杀/闪/桃/酒；非基本牌＝锦囊牌与装备牌。本页只做计数与结算，牌面效果以实体卡为准。</span></div></div>
+<div class="panel"><h2>手牌构成计数</h2>
+<div style="display:flex;gap:14px;flex-wrap:wrap">
+  <div style="flex:1;min-width:230px;border:1px solid #d8c8a8;border-radius:8px;padding:10px">
+    <div style="font-size:12px;font-weight:bold;color:#8a1f1f">基本牌（杀/闪/桃/酒）</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+      <button class="ghost" id="sjBm">−</button><span id="sjBv" style="font-size:26px;font-weight:bold;min-width:44px;text-align:center">0</span><button class="ghost" id="sjBp">＋</button>
+    </div>
+  </div>
+  <div style="flex:1;min-width:230px;border:1px solid #d8c8a8;border-radius:8px;padding:10px">
+    <div style="font-size:12px;font-weight:bold;color:#8a1f1f">非基本牌（锦囊/装备）</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+      <button class="ghost" id="sjNm">−</button><span id="sjNv" style="font-size:26px;font-weight:bold;min-width:44px;text-align:center">0</span><button class="ghost" id="sjNp">＋</button>
+    </div>
+  </div>
+</div>
+<div id="sjStatus" class="stat" style="margin-top:10px;font-size:15px;font-weight:bold">—</div>
+<div style="margin-top:8px"><button class="ghost" id="sjReset">清零重置</button></div>
+</div>
+<div class="panel"><h2>使用牌结算记录</h2>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+  <button class="ghost" id="sjUseB">使用一张：基本牌</button>
+  <button class="ghost" id="sjUseN">使用一张：非基本牌</button>
+  <button class="ghost" id="sjUndo">撤销上一条</button>
+</div>
+<div id="sjLog" class="stat" style="line-height:1.9;max-height:220px;overflow:auto">尚无记录</div>
+</div>
+<footer>整肃三军，可育虎贲 · 计数由玩家手动维护；使用牌的判定以<b>使用前</b>手牌构成为准，结算后该牌自动移出手牌计数</footer>
 </div>
 
 <!-- 随机数视图 -->
@@ -995,6 +1033,52 @@ document.getElementById("xxyToggle").addEventListener("click",function(){
   var p=document.getElementById("xxyPoolPanel");
   if(p.classList.contains("hidden")){buildList();p.classList.remove("hidden");}});
 window.__xxy={pool:MOUP,st:st,draw:draw,render:render,cardHtml:cardHtml};
+})();
+
+/* ===== 星曹仁·肃军判定器 ===== */
+(function(){
+  var KEY='sujun_state_v1';
+  var st={b:0,n:0,log:[]};
+  try{var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s&&typeof s.b==='number'&&typeof s.n==='number'&&Array.isArray(s.log)){st=s;}}catch(e){}
+  function save(){localStorage.setItem(KEY,JSON.stringify(st));}
+  function el(id){return document.getElementById(id);}
+  function render(){
+    el('sjBv').textContent=st.b; el('sjNv').textContent=st.n;
+    var s=el('sjStatus'), diff=st.b-st.n;
+    if(st.b===0&&st.n===0&&st.log.length===0){s.textContent='—';s.style.color='#555';}
+    else if(diff===0){s.textContent='✔ 平衡：现在使用牌可发动肃军，摸两张牌';s.style.color='#1B8A3C';}
+    else{var more=diff>0?'基本牌':'非基本牌';s.textContent='✘ 不平衡：'+more+'多 '+Math.abs(diff)+' 张（基本 '+st.b+' : 非基本 '+st.n+'）';s.style.color='#8a1f1f';}
+    var lg=el('sjLog');
+    if(!st.log.length){lg.innerHTML='尚无记录';}
+    else{lg.innerHTML=st.log.map(function(e,i){return '<div>#'+(st.log.length-i)+'　'+e.txt+(e.ok?'　<span style="color:#1B8A3C">摸两张</span>':'　<span style="color:#8a1f1f">未发动</span>')+'　<button class="ghost" data-sjundo="'+i+'" style="font-size:11px;padding:2px 8px">撤销</button></div>';}).join('');}
+    save();
+  }
+  function bump(k,d){st[k]=Math.max(0,st[k]+d);render();}
+  function use(kind){ // kind: 'B'|'N'，判定用使用前状态
+    var diff=st.b-st.n, ok=(diff===0&&st.b+st.n>0);
+    var kname=kind==='B'?'基本牌':'非基本牌';
+    st.log.push({ok:ok,txt:'使用一张'+kname+'（使用前 基本'+st.b+':非基本'+st.n+'）'});
+    if(kind==='B')st.b=Math.max(0,st.b-1);else st.n=Math.max(0,st.n-1);
+    if(ok)st.log[st.log.length-1].txt+='，摸两张——请按牌类手动＋入计数';
+    render();
+  }
+  function undo(i){ // 撤销第 i 条记录（回退该牌离手；摸的牌请手动调整计数）
+    var e=st.log[i]; if(!e)return;
+    if(e.txt.indexOf('使用一张基本牌')>=0)st.b=Math.min(99,st.b+1);else st.n=Math.min(99,st.n+1);
+    st.log.splice(i,1); render();
+  }
+  el('sjBp').onclick=function(){bump('b',1);};
+  el('sjBm').onclick=function(){bump('b',-1);};
+  el('sjNp').onclick=function(){bump('n',1);};
+  el('sjNm').onclick=function(){bump('n',-1);};
+  el('sjUseB').onclick=function(){use('B');};
+  el('sjUseN').onclick=function(){use('N');};
+  el('sjReset').onclick=function(){st.b=0;st.n=0;st.log=[];render();};
+  el('sjLog').addEventListener('click',function(ev){
+    var b=ev.target.closest('[data-sjundo]'); if(!b)return; undo(parseInt(b.getAttribute('data-sjundo'),10));
+  });
+  render();
+  window.__sj={st:st,use:use,undo:undo,render:render,bump:bump};
 })();
 </script>
 </body>
