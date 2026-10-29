@@ -146,6 +146,11 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <div class="h-title">星曹仁 · 肃军判定器</div>
   <div class="h-desc">整肃三军 · 魏 · 使用牌时手牌构成判定<br>基本牌/非基本牌实时计数 · 平衡即亮灯<br>使用牌自动结算摸二 · 线下最易数错，此页代劳</div>
 </div>
+<div class="home-card gold" data-go="zhengsu">
+  <div class="h-icon">整</div>
+  <div class="h-title">整肃</div>
+  <div class="h-desc">任务三选一 · 擂进/变阵/鸣止<br>完成后摸2张牌或回复1点体力<br>声明任务 · 领取奖励 · 记录留存</div>
+</div>
 <div class="home-card grey" data-go="rng">
     <div class="h-icon">数</div>
     <div class="h-title">随机数</div>
@@ -347,6 +352,52 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <div id="sjLog" class="stat" style="line-height:1.9;max-height:220px;overflow:auto">尚无记录</div>
 </div>
 <footer>整肃三军，可育虎贲 · 计数由玩家手动维护；使用牌的判定以<b>使用前</b>手牌构成为准，结算后该牌自动移出手牌计数</footer>
+</div>
+
+<!-- 整肃视图 -->
+<div id="view-zhengsu" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>整肃</h1><div class="vsub">任务三选一：擂进 · 变阵 · 鸣止 —— 完成整肃后，选择摸2张牌或回复1点体力</div></div></div>
+<div class="panel"><h2>核心规则（所有武将通用）</h2><div style="font-size:13.5px;line-height:2.1">
+<b style="color:#8a1f1f">任务三选一：</b><br>
+① <b>擂进</b> —— 出牌阶段用牌点数递增且≥3张<br>
+② <b>变阵</b> —— 用牌花色相同且≥2张<br>
+③ <b>鸣止</b> —— 弃牌阶段弃置花色均不同且≥2张<br>
+<b style="color:#8a1f1f">奖励：</b>完成整肃后，选择<b>摸2张牌</b>或<b>回复1点体力</b>。<br>
+<span style="font-size:12.5px;color:#8a7a5e">任务是否达成由玩家按实体牌当面核对（点数/花色）；本页负责声明任务、领取奖励与记录留存，不代判定。</span>
+</div></div>
+<div class="panel"><h2>本次整肃</h2>
+<div class="toolbar"><button id="zsStart">开始整肃</button><span id="zsStatus" class="stat" style="font-size:14px"></span></div>
+</div>
+<div class="panel"><h2>整肃记录</h2>
+<div class="toolbar"><button class="ghost" id="zsUndo">撤销上一条</button><button class="ghost" id="zsClear">清空记录</button></div>
+<div id="zsLog" class="stat" style="line-height:2;max-height:220px;overflow:auto">尚无记录</div>
+</div>
+<footer>擂进而进 · 变阵而变 · 鸣止而止 —— 任务与奖励的选择记录保存在本机浏览器 localStorage</footer>
+<!-- 弹窗：任务三选一 -->
+<div id="zsMaskTask" class="mao-mask hidden">
+  <div class="mao-pop" style="max-width:680px">
+    <div class="mao-pop-src">整肃 · 任务三选一</div>
+    <div class="mao-pop-name" style="font-size:20px;letter-spacing:3px">声明你的整肃任务</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="cand" data-zstask="leijin" style="min-width:180px"><div class="c-name" style="font-size:22px">擂进</div><div class="c-desc">出牌阶段用牌点数递增<br>且≥3张</div></div>
+      <div class="cand" data-zstask="bianzhen" style="min-width:180px"><div class="c-name" style="font-size:22px">变阵</div><div class="c-desc">用牌花色相同<br>且≥2张</div></div>
+      <div class="cand" data-zstask="mingzhi" style="min-width:180px"><div class="c-name" style="font-size:22px">鸣止</div><div class="c-desc">弃牌阶段弃置花色均不同<br>且≥2张</div></div>
+    </div>
+    <div style="font-size:12px;color:#8a7a5e">点击任务卡即完成声明，随后选择奖励；点击弹窗外空白取消本次。</div>
+  </div>
+</div>
+<!-- 弹窗：奖励二选一 -->
+<div id="zsMaskReward" class="mao-mask hidden">
+  <div class="mao-pop" style="max-width:560px">
+    <div class="mao-pop-src">整肃 · 领取奖励</div>
+    <div class="mao-pop-name" style="font-size:20px;letter-spacing:3px">任务：<span id="zsPicked">—</span></div>
+    <div style="font-size:13.5px;color:#4a4234;line-height:1.9;margin-bottom:12px">完成整肃后，选择一项奖励：</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="cand" data-zsreward="draw2" style="min-width:180px;text-align:center"><div class="c-name" style="font-size:20px">摸两张牌</div></div>
+      <div class="cand" data-zsreward="heal1" style="min-width:180px;text-align:center"><div class="c-name" style="font-size:20px">回复1点体力</div></div>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- 随机数视图 -->
@@ -1079,6 +1130,61 @@ window.__xxy={pool:MOUP,st:st,draw:draw,render:render,cardHtml:cardHtml};
   });
   render();
   window.__sj={st:st,use:use,undo:undo,render:render,bump:bump};
+})();
+
+/* ===== 整肃（任务三选一 → 奖励二选一） ===== */
+(function(){
+  var KEY='zhengsu_state_v1';
+  var st={log:[]};
+  try{var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s&&Array.isArray(s.log)){st=s;}}catch(e){}
+  function save(){localStorage.setItem(KEY,JSON.stringify(st));}
+  function el(id){return document.getElementById(id);}
+  var TASKS=[
+    {id:'leijin',name:'擂进',cond:'出牌阶段用牌点数递增且≥3张'},
+    {id:'bianzhen',name:'变阵',cond:'用牌花色相同且≥2张'},
+    {id:'mingzhi',name:'鸣止',cond:'弃牌阶段弃置花色均不同且≥2张'}
+  ];
+  var REWARDS=[{id:'draw2',name:'摸两张牌'},{id:'heal1',name:'回复1点体力'}];
+  var pending=null;
+  function taskById(id){for(var i=0;i<TASKS.length;i++)if(TASKS[i].id===id)return TASKS[i];return null;}
+  function rewardById(id){for(var i=0;i<REWARDS.length;i++)if(REWARDS[i].id===id)return REWARDS[i];return null;}
+  function fmt(t){var d=new Date(t);function p(n){return (n<10?'0':'')+n;}return (d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());}
+  function render(){
+    var s=el('zsStatus');
+    if(!st.log.length){s.textContent='尚未进行过整肃 —— 点击「开始整肃」声明任务';s.style.color='#8a7a5e';}
+    else{var last=st.log[st.log.length-1];s.innerHTML='已完成 '+st.log.length+' 次 · 最近一次：<b>'+last.taskName+'</b> → '+last.rewardName;s.style.color='#3a3226';}
+    var lg=el('zsLog');
+    lg.innerHTML=st.log.length?st.log.map(function(e,i){return '<div>#'+(st.log.length-i)+'　'+fmt(e.time)+'　<b style="color:#8a1f1f">'+e.taskName+'</b>　→　'+e.rewardName+'　<button class="ghost" data-zsundo="'+i+'" style="font-size:11px;padding:2px 8px">撤销</button></div>';}).join(''):'尚无记录';
+    save();
+  }
+  el('zsStart').onclick=function(){pending=null;el('zsMaskTask').classList.remove('hidden');};
+  el('zsMaskTask').addEventListener('click',function(ev){if(ev.target===el('zsMaskTask'))el('zsMaskTask').classList.add('hidden');});
+  el('zsMaskReward').addEventListener('click',function(ev){if(ev.target===el('zsMaskReward'))el('zsMaskReward').classList.add('hidden');});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-zstask]'),function(c){
+    c.onclick=function(){
+      pending=c.getAttribute('data-zstask');
+      var t=taskById(pending);
+      el('zsPicked').textContent=t.name+'（'+t.cond+'）';
+      el('zsMaskTask').classList.add('hidden');
+      el('zsMaskReward').classList.remove('hidden');
+    };
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-zsreward]'),function(c){
+    c.onclick=function(){
+      var r=rewardById(c.getAttribute('data-zsreward'));
+      var t=taskById(pending)||TASKS[0];
+      st.log.push({task:t.id,taskName:t.name,reward:r.id,rewardName:r.name,time:Date.now()});
+      el('zsMaskReward').classList.add('hidden');
+      pending=null;render();
+    };
+  });
+  el('zsUndo').onclick=function(){if(st.log.length){st.log.pop();render();}};
+  el('zsClear').onclick=function(){st.log=[];render();};
+  el('zsLog').addEventListener('click',function(ev){
+    var b=ev.target.closest('[data-zsundo]'); if(!b)return; var i=parseInt(b.getAttribute('data-zsundo'),10); st.log.splice(i,1); render();
+  });
+  render();
+  window.__zs={st:st,TASKS:TASKS,REWARDS:REWARDS,render:render};
 })();
 </script>
 </body>
