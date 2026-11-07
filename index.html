@@ -146,6 +146,21 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <div class="h-title">整肃</div>
   <div class="h-desc">任务三选一 · 擂进/变阵/鸣止<br>完成后摸2张牌或回复1点体力<br>声明任务 · 领取奖励 · 记录留存</div>
 </div>
+<div class="home-card red" data-go="sq">
+  <div class="h-icon">运</div>
+  <div class="h-title">神孙权 · 东吴命运线</div>
+  <div class="h-desc">神 · 4勾玉 · LE 018<br>随机开线（六线）· 帝力随机抽技（十八技池）<br>集齐三线技能自动点亮命运线</div>
+</div>
+<div class="home-card blue" data-go="kp">
+  <div class="h-icon">破</div>
+  <div class="h-title">谋诸葛亮 · 看破记录</div>
+  <div class="h-desc">蜀 · 3勾玉 · 忠武侯<br>每轮记录牌名 · 每局至多四个 · 与上轮不可重复<br>牌名池23个（wiki 非装备牌）· 含火计使命计数</div>
+</div>
+<div class="home-card gold" data-go="cmi">
+  <div class="h-icon">名</div>
+  <div class="h-title">神曹丕 · 刻名</div>
+  <div class="h-desc">神 · 4勾玉 · 月晦书轮回<br>受伤→随机发动曹姓武将技能（官方9技池）<br>②同名牌获取登记 · 至多5张</div>
+</div>
 <div class="home-card grey" data-go="rng">
     <div class="h-icon">数</div>
     <div class="h-title">随机数</div>
@@ -369,6 +384,52 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <div class="panel"><h2>主技能 · 智囊（本视图实现；副技能"苟渚"未实现）</h2><div style="font-size:13.5px;line-height:1.9"><b>智囊（线上 2024·十周年）：</b>当你使用锦囊/装备牌后，你可以获得一个技能台词/技能名包含"谋"的技能，直到下次因使用<b>此类别</b>的牌获得技能。<br>即：因锦囊牌、装备牌各记一个技能——<b>同类别新技能替换旧技能，两类互不覆盖，最多同时持有 2 个</b>。<br><span style="font-size:12.5px;color:#8a7a5e">技能池 80 个（技能名含"谋"14 + 台词含"谋"66，源自萌娘百科《天水濯名》技能库，描述为线上版文本）。注：线上"台词含谋"实际未配置正确、可能抽到池外技能（萌娘百科记载），本工作台按 80 技池执行。</span></div></div>
 <div class="panel"><h2>发动智囊 · 先选类别，再获得技能</h2><div style="margin-bottom:10px"><span style="font-size:13px;color:#8a7a5e;margin-right:6px">因使用哪类牌获得？</span><label class="rad"><input type="radio" name="xxyCat" id="xxyCatJn" checked> 锦囊牌</label><label class="rad"><input type="radio" name="xxyCat" id="xxyCatEq"> 装备牌</label></div><div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px"><div style="flex:1;min-width:250px"><div style="font-size:12px;font-weight:bold;color:#8a7a5e;margin-bottom:4px">因【锦囊牌】获得（槽1）</div><div id="xxySlotJn" class="slot" style="min-height:110px">尚未因使用【锦囊牌】获得技能</div></div><div style="flex:1;min-width:250px"><div style="font-size:12px;font-weight:bold;color:#8a7a5e;margin-bottom:4px">因【装备牌】获得（槽2）</div><div id="xxySlotEq" class="slot" style="min-height:110px">尚未因使用【装备牌】获得技能</div></div></div><div class="toolbar"><button id="xxyDraw">发动智囊</button><button id="xxyToggle" class="ghost">查看技能池（80）</button><button id="xxyReset" class="ghost">重置</button><span id="xxyStat" style="font-size:13px;color:#8a7a5e"></span></div></div> <div class="panel hidden" id="xxyPoolPanel"><h2>智囊技能池（《天水濯名》线下专属技能库）</h2><div id="xxyPoolList" style="font-size:13px;line-height:1.8"></div></div>
 </div>
+<!-- 神孙权·东吴命运线视图 -->
+<div id="view-sq" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>神孙权 · 东吴命运线</h1><div class="vsub">神 · 4勾玉 · 同辉日月（LE 018）—— 驭衡开线、帝力抽技以实体牌为准；本页负责随机开线、随机抽技与"集齐三技点亮命运线"的判定记录。</div></div></div>
+<div class="panel"><h2>当前命运线</h2><div id="sqLine" class="slot" style="min-height:90px">未开线 —— 游戏开始时按〖驭衡〗随机开启一条命运线</div>
+<div class="toolbar"><button id="sqOpen">驭衡 · 随机开启命运线</button><span class="stat" id="sqLineStat"></span></div></div>
+<div class="panel"><h2>帝力 · 随机获得技能</h2>
+<div class="toolbar"><button id="sqDrawAny">随机获得·任意命运线涉及（18技池）</button><button id="sqDrawCur">随机获得·当前命运线涉及</button><button id="sqLoseAll" class="ghost">失去其他非锁定技</button><span class="stat">出牌阶段结束时若未发动帝力：失去1点体力</span></div>
+<div id="sqResult" style="margin-top:8px"></div>
+<div style="font-size:12px;color:#8a7a5e;margin-top:6px">持有技能可点"移除"手动摘除；"失去其他非锁定技"一键清空（点亮判定看"曾经获得过"，不受移除影响）</div></div>
+<div class="panel"><h2>六线点亮进度（"若你获得过"三个涉及技能即点亮该线）</h2><div id="sqFates" style="font-size:13px;line-height:1.9"></div></div>
+<div class="panel"><h2>本视图记录</h2><div class="toolbar"><button id="sqReset" class="ghost">重置本局</button></div><div id="sqLog" class="stat" style="line-height:2;max-height:220px;overflow:auto">尚无记录</div></div>
+<footer>命运线＝圣质/持纲/穹览/权道/交辉/渊虑六技，各涉及三个技能（共18；〖决堰〗附带〖集智〗，wiki注7）· 来源：萌娘百科《三国杀:孙权》OL·SP废案段</footer>
+</div>
+
+<!-- 谋诸葛亮·看破记录视图 -->
+<div id="view-kp" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>谋诸葛亮 · 看破记录</h1><div class="vsub">蜀 · 3勾玉 · 忠武侯（谋攻篇·知 /《九鼎》实体版）—— 技能在牌上；本页记录〖看破〗的牌名、额度与轮次，附带火计使命计数。</div></div></div>
+<div class="panel"><h2>记录额度与轮次</h2>
+<div class="toolbar"><span class="stat">第 <b id="kpRound">1</b> 轮</span><button id="kpNextRound">开始新一轮（清除本轮记录）</button><span class="stat" id="kpQuota"></span></div>
+<div class="toolbar"><label class="rad"><input type="radio" name="kpMode" id="kpModeLife" checked> 牌面口径：每局至多记录四个牌名</label><label class="rad"><input type="radio" name="kpMode" id="kpModeRound"> 变体口径：每轮同时至多四个</label></div>
+<div style="font-size:12.5px;color:#8a7a5e" id="kpLast"></div></div>
+<div class="panel"><h2>点牌名即记录（非装备牌名池 23 · wiki 卡牌分类）</h2><div id="kpPool"></div>
+<div class="toolbar"><input id="kpCustom" placeholder="自定义牌名（牌堆里有的非装备牌名都行）" style="padding:8px;border:1px solid #c9bfa8;border-radius:6px;width:220px"><button id="kpCustomAdd" class="ghost">记录自定义</button></div></div>
+<div class="panel"><h2>本轮记录（他角色使用同名牌时点"看破"）</h2><div id="kpRec" style="font-size:13.5px;line-height:2.2"></div></div>
+<div class="panel"><h2>火计 · 使命计数</h2>
+<div class="toolbar"><span class="stat">游戏人数 X</span><input type="number" id="kpX" value="8" min="2" max="8" style="width:64px;padding:6px;border:1px solid #c9bfa8;border-radius:6px"><button id="kpFireAdd" class="cardname">火焰伤害+1</button><button id="kpFireAdd2" class="cardname">+2</button><button id="kpFireSub" class="ghost">-1</button><span class="stat" id="kpFireStat"></span></div>
+<div class="toolbar"><button id="kpAwake">使命达成</button><button id="kpFail" class="ghost">使命失败（濒死）</button><span class="stat" id="kpFireState"></span></div></div>
+<div class="panel"><h2>操作记录</h2><div class="toolbar"><button class="ghost" id="kpReset">重置本局</button></div><div id="kpLog" class="stat" style="line-height:2;max-height:200px;overflow:auto">尚无记录</div></div>
+<footer>看破牌面：每轮开始时清除记录，可记录与上轮均不相同的非装备牌名（可重复记同名；每局至多四个）；他人使用同名牌→移除一个该牌名记录+令此牌无效+摸一张 · 来源：萌娘百科《三国杀:诸葛亮》2024版（海外服2025版额度为三个，如需按该口径请手动执行）</footer>
+</div>
+
+<!-- 神曹丕·刻名视图 -->
+<div id="view-cmi" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>神曹丕 · 刻名</h1><div class="vsub">神 · 4勾玉 · 月晦书轮回 —— 阴鸷/刻名条件以实体牌为准；本页做〖刻名〗①"随机发动曹姓武将技能"抽技器 与 ②同名牌获取登记。</div></div></div>
+<div class="panel"><h2>刻名① · 受到伤害后随机发动</h2>
+<div class="toolbar"><button id="cmiRoll">受到伤害 → 随机发动曹技</button><span class="stat" id="cmiStat"></span></div>
+<div id="cmiResult" style="margin-top:8px"></div>
+<div style="font-size:12.5px;color:#8a7a5e;margin-top:6px">先按牌面：若伤害来源武将牌上有"受到伤害后"技能，直接发动那个（不需要本页）；没有时才点上面的按钮随机抽。</div></div>
+<div class="panel"><h2>曹姓技能池（9 · 官方口径，均含"受到伤害后"时机）</h2><div id="cmiPool" style="font-size:13px;line-height:1.9"></div></div>
+<div class="panel"><h2>刻名② · 造成伤害后 同名牌获取登记</h2>
+<div class="toolbar"><input id="cmiWho" placeholder="角色名/座位号" style="padding:8px;border:1px solid #c9bfa8;border-radius:6px;width:160px"><button id="cmiAdd">对其造成伤害，挂起追踪</button><span class="stat" id="cmiTotal"></span></div>
+<div id="cmiPend" style="font-size:13.5px;line-height:2.2;margin-top:6px"></div></div>
+<div class="panel"><h2>操作记录</h2><div class="toolbar"><button class="ghost" id="cmiReset">重置本局</button></div><div id="cmiLog" class="stat" style="line-height:2;max-height:200px;overflow:auto">尚无记录</div></div>
+<footer>技能池来源：biligame《三国杀》wiki「神曹丕技能池」页（界突破以后版本为准）；〖酒诗〗此时机执行②、〖妩艳〗执行"受到伤害后"分支 · 来源页更新于2026-10-10</footer>
+</div>
+
 <div id="view-rng" class="hidden">
 <div class="viewbar">
   <button class="ghost" data-go="home">← 首页</button>
@@ -1102,6 +1163,187 @@ window.__xxy={pool:MOUP,st:st,draw:draw,render:render,cardHtml:cardHtml};
   render();
   window.__zs={st:st,TASKS:TASKS,REWARDS:REWARDS,render:render};
 })();
+
+/* ================= 神孙权 · 东吴命运线 ================= */
+(function(){
+var FATES=[
+["圣质","锁定技，若你获得过〖英魂〗〖弘德〗〖秉壹〗：你点数为质数的牌不能被响应。",["英魂","弘德","秉壹"]],
+["持纲","锁定技，若你获得过〖观微〗〖弼政〗〖安国〗：你的判定阶段改为摸牌阶段。",["观微","弼政","安国"]],
+["穹览","锁定技，若你获得过〖涉猎〗〖问卦〗〖博图〗：你视为随机开启其他两条东吴命运线。",["涉猎","问卦","博图"]],
+["权道","锁定技，若你获得过〖制衡〗〖诫训〗〖安恤〗：你点数为字母的手牌视为【调剂盐梅】。",["制衡","诫训","安恤"]],
+["交辉","锁定技，若你获得过〖下书〗〖结姻〗〖缔盟〗：你最后一张手牌视为【远交近攻】。",["下书","结姻","缔盟"]],
+["渊虑","锁定技，若你获得过〖观潮〗〖决堰〗〖澜疆〗：你使用的装备牌改为【长安大舰】。",["观潮","决堰","澜疆"]]
+];
+var SK18=[
+["英魂","孙策","准备阶段，若你已受伤，你可以选择一名其他角色并选择一项：1.令其摸X张牌，然后弃置一张牌；2.令其摸一张牌，然后弃置X张牌（X为你已损失的体力值）。"],
+["弘德","步骘","当你一次性获得或失去至少两张牌时，你可以令一名其他角色摸一张牌。"],
+["秉壹","顾雍","每阶段限一次，当你的牌被弃置后，你可以展示所有手牌，若颜色均相同，你令你与至多X名角色各摸一张牌（X为你的手牌数）。"],
+["观微","潘濬","每回合限一次，一名角色的出牌阶段结束时，若其于此回合内使用过至少两张牌且这些牌花色均相同，你可以弃置一张牌。若如此做，其摸两张牌，然后其获得一个额外的出牌阶段。"],
+["弼政","孙邵","摸牌阶段结束时，你可以令一名角色摸两张牌，你与其之中手牌数大于体力上限的角色弃置两张牌。"],
+["安国","朱治","出牌阶段限一次，你可以令一名其他角色执行：若其手牌数为全场最少，摸一张牌；若其体力值为全场最低，回复1点体力；若其装备区内牌数为全场最少，随机使用一张装备牌。然后若该角色有未执行的分支且你满足条件，你执行之。"],
+["涉猎","神吕蒙","摸牌阶段，你可以改为亮出牌堆顶的五张牌，然后获得其中每种花色的牌各一张。"],
+["问卦","徐氏","每名角色出牌阶段限一次，该角色可以交给你一张牌（若为你则仅选择牌），然后你可以将此牌置于牌堆顶或牌堆底，你与其从牌堆另一端摸一张牌。"],
+["博图","","回合结束后，若你于出牌阶段内使用过四种花色的牌，则你可以获得一个额外回合。"],
+["制衡","界孙权","出牌阶段限一次，你可以弃置任意张牌，然后摸等量的牌。若你以此法弃置了所有的手牌，则额外摸一张牌。"],
+["诫训","薛综","结束阶段，你可以令一名其他角色摸场上方块牌数张牌，然后弃置X张牌（X为此前此技能发动过的次数）。若该角色因此弃置了所有牌，则你失去本技能。"],
+["安恤","步练师","出牌阶段限一次，你可以选择两名手牌数不同的其他角色，令其中手牌少的角色获得手牌多的角色一张手牌并展示之，若此牌不为黑桃，你摸一张牌。"],
+["下书","阚泽","出牌阶段开始时，你可以交给一名其他角色所有手牌，令该角色亮出任意张手牌，你选择一项：1.获得其亮出的手牌；2.获得其未亮出的手牌。"],
+["结姻","孙尚香","出牌阶段限一次，你可以弃置两张手牌，令你和一名已受伤的其他男性角色各回复1点体力。"],
+["缔盟","鲁肃","出牌阶段限一次，你可以选择两名其他角色并弃置X张牌（X为这两名角色手牌数的差），然后令这两名角色交换手牌。"],
+["观潮","严畯","出牌阶段开始时，你可以选择一项直到回合结束：1.严格递增；2.严格递减。当你使用牌时，若你此阶段使用过的所有牌满足此项，你摸一张牌。"],
+["决堰","陆抗","出牌阶段限一次，你可以废除你装备区里的一种装备栏，然后你本回合获得效果：武器栏，使用【杀】限制次数+3；防具栏，摸三张牌，手牌上限+3；坐骑栏，使用牌无距离限制；宝物栏，视为拥有技能〖集智〗。（附带〖集智〗）"],
+["澜疆","","结束阶段，你可以令所有手牌数大于等于你的角色依次选择是否令你摸一张牌。选择完成后，你可以对手牌数等于你的其中一名角色造成1点伤害，然后令手牌数小于你的其中一名角色摸一张牌。"]
+];
+function skOf(n){for(var i=0;i<SK18.length;i++)if(SK18[i][0]===n)return SK18[i];return null;}
+var st;try{st=JSON.parse(localStorage.getItem('sq_fate_v1'))||null}catch(e){st=null}
+if(!st||typeof st!=='object'||!st.owned)st={line:-1,extra:[],owned:[],ever:[],log:[],qlDone:0};
+if(st.qlDone===undefined)st.qlDone=0;
+function save(){localStorage.setItem('sq_fate_v1',JSON.stringify(st));}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function litIdx(i){var f=FATES[i];for(var k=0;k<f[2].length;k++)if(st.ever.indexOf(f[2][k])<0)return false;return true;}
+function openLines(){var r=[];if(st.line>=0)r.push(st.line);st.extra.forEach(function(x){if(r.indexOf(x)<0)r.push(x)});return r;}
+function curPoolNames(){var ns=[];openLines().forEach(function(li){FATES[li][2].forEach(function(n){if(ns.indexOf(n)<0)ns.push(n)})});return ns;}
+function tryQL(){/* 穹览点亮→额外随机开两条其他线（一次局至多触发一次） */
+  if(st.qlDone===1)return;
+  if(st.ever.indexOf("涉猎")>=0&&st.ever.indexOf("问卦")>=0&&st.ever.indexOf("博图")>=0){
+    var cand=[];for(var i=0;i<6;i++){if(i!==st.line&&st.extra.indexOf(i)<0)cand.push(i);}
+    var picked=[];
+    while(picked.length<2&&cand.length){var j=cand.splice(rint(cand.length),1)[0];st.extra.push(j);picked.push(FATES[j][0]);}
+    st.qlDone=1;
+    st.log.push("〖穹览〗点亮：视为随机开启其他两条命运线 → 追加 "+picked.join(" / ")+"线");
+  }
+}
+function bumpLog(){if(st.log.length>60)st.log=st.log.slice(-60);}
+function rollSkill(fromPool,label){
+  var pool=fromPool.map(skOf).filter(Boolean);
+  if(!pool.length){st.log.push(label+"：暂无可抽（尚未开线）");bumpLog();save();render();return null;}
+  var e=pool[rint(pool.length)];
+  var dup=st.owned.indexOf(e[0])>=0;
+  st.owned.push(e[0]);
+  var isNew=st.ever.indexOf(e[0])<0;
+  if(isNew){st.ever.push(e[0]);tryQL();}
+  st.log.push(label+"随机获得〖"+e[0]+"〗"+(dup?"（已持有，重复获得，无变化）":(isNew?"":"（再次获得）")));
+  bumpLog();save();render();return e;
+}
+function cardHtml(e){return '<div class="cand" style="cursor:default"><div class="c-name">'+esc(e[0])+(e[1]?'<span class="c-src"> · '+esc(e[1])+'</span>':'')+'</div><div class="c-desc" style="font-size:12.5px;margin:4px 0">'+esc(e[2])+'</div></div>';}
+function render(){
+  var el=document.getElementById("sqLine");
+  var ols=openLines();
+  if(!ols.length){el.className="slot";el.innerHTML='未开线 —— 游戏开始时按〖驭衡〗随机开启一条命运线';}
+  else{el.className="slot filled";var h="";ols.forEach(function(li,i){var f=FATES[li];h+='<div style="margin:6px 0"><b style="color:#8a1f1f;font-size:16px">'+f[0]+'线</b>'+(i===st.line?'<span class="c-src" style="font-size:11px"> · 驭衡所开</span>':'<span class="c-src" style="font-size:11px"> · 穹览追加</span>')+'<div style="font-size:12.5px;color:#4a4234;margin:2px 0">'+f[1]+'</div><div style="font-size:12.5px">涉及：'+f[2].map(function(n){var has=st.ever.indexOf(n)>=0;return '<span style="color:'+(has?'#b8860b':'#a89878')+';font-weight:'+(has?'bold':'normal')+'">〖'+n+'〗'+(has?'✓':'')+'</span>'}).join('　')+'</div></div>';});el.innerHTML=h;}
+  document.getElementById("sqLineStat").textContent=ols.length?("当前线："+ols.map(function(x){return FATES[x][0]}).join(" / ")):"";
+  var r=document.getElementById("sqResult");
+  var cnt={};st.owned.forEach(function(n){cnt[n]=(cnt[n]||0)+1});
+  var names=Object.keys(cnt);
+  if(!names.length){r.innerHTML='<span style="color:#a89878;font-size:13px">（暂无持有技能）</span>';}
+  else{r.innerHTML='<div style="display:flex;gap:10px;flex-wrap:wrap">'+names.map(function(n){return '<div style="position:relative"><button class="ghost" style="padding:2px 8px;font-size:11px;position:absolute;top:-6px;right:-6px;z-index:2" data-sqrm="'+esc(n)+'">移除</button>'+cardHtml(skOf(n))+'</div>'}).join('')+'</div>';}
+  var fh='<table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr style="color:#8a7a5e"><td style="width:70px">命运线</td><td>三个涉及技能（✓=已获得过）</td><td style="width:70px">状态</td></tr>';
+  FATES.forEach(function(f,i){var lit=litIdx(i);fh+='<tr style="border-top:1px dashed #e3dccb"><td><b>'+f[0]+'</b></td><td>'+f[2].map(function(n){return (st.ever.indexOf(n)>=0?'<span style="color:#b8860b">✓'+n+'</span>':'<span style="color:#a89878">'+n+'</span>')}).join('　')+'</td><td>'+(lit?'<span style="color:#8a1f1f;font-weight:bold">已点亮</span>':'<span style="color:#a89878">'+f[2].filter(function(n){return st.ever.indexOf(n)>=0}).length+'/3</span>')+'</td></tr>';});
+  fh+='</table>';document.getElementById("sqFates").innerHTML=fh;
+  document.getElementById("sqLog").innerHTML=st.log.length?st.log.map(esc).join('<br>'):'尚无记录';
+}
+function $id(i){return document.getElementById(i);}
+$id("sqOpen").onclick=function(){var i=rint(6);st.line=i;st.extra=[];st.qlDone=0;st.log.push("驭衡：随机开启〖"+FATES[i][0]+"〗线");tryQL();bumpLog();save();render();};
+$id("sqDrawAny").onclick=function(){rollSkill(SK18.map(function(x){return x[0]}),"帝力·任意线");};
+$id("sqDrawCur").onclick=function(){rollSkill(curPoolNames(),"帝力·当前线");};
+$id("sqLoseAll").onclick=function(){if(!st.owned.length)return;st.log.push("帝力代价：失去其他非锁定技 "+st.owned.map(function(n){return "〖"+n+"〗"}).join(""));st.owned=[];bumpLog();save();render();};
+$id("sqReset").onclick=function(){st.line=-1;st.extra=[];st.owned=[];st.ever=[];st.log=[];st.qlDone=0;save();render();};
+$id("sqResult").addEventListener("click",function(ev){var b=ev.target.closest("[data-sqrm]");if(!b)return;var n=b.getAttribute("data-sqrm");var i=st.owned.indexOf(n);if(i>=0)st.owned.splice(i,1);save();render();});
+render();
+window.__sq={st:st,FATES:FATES,SK18:SK18,rollSkill:rollSkill,openLine:function(){$id("sqOpen").click()},curPoolNames:curPoolNames,litIdx:litIdx,render:render};
+})();
+
+/* ================= 谋诸葛亮 · 看破记录 ================= */
+(function(){
+var BASIC=["杀","雷杀","火杀","闪","桃","酒"];
+var TRICK=["决斗","万箭齐发","南蛮入侵","过河拆桥","顺手牵羊","无中生有","乐不思蜀","兵粮寸断","闪电","桃园结义","五谷丰登","铁索连环","借刀杀人","火攻","水淹七军","无懈可击","落井下石"];
+var POOL=BASIC.concat(TRICK);
+var st;try{st=JSON.parse(localStorage.getItem('kp_state_v1'))||null}catch(e){st=null}
+if(!st||typeof st!=='object'||!st.rec)st={round:1,last:[],rec:[],used:0,mode:"life",fireX:8,fireDmg:0,awake:0,log:[]};
+function save(){localStorage.setItem('kp_state_v1',JSON.stringify(st));}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function slotsLeft(){return st.mode==="life"?(4-st.used):(4-st.rec.length);}
+function say(m){st.log.push(m);if(st.log.length>80)st.log=st.log.slice(-80);save();render();}
+function canRecord(n){
+  if(st.awake===1)return "使命已达成：〖火计〗〖看破〗已失去，记录停用";
+  if(st.last.indexOf(n)>=0)return "【"+n+"】与上轮记录相同，不可再记";
+  if(slotsLeft()<=0)return (st.mode==="life"?"每局四个名额已用完":"本轮四个槽已满");
+  return "";
+}
+function record(n){n=String(n||"").trim();if(!n)return;var why=canRecord(n);if(why){say(why);return;}
+  st.rec.push(n);if(st.mode==="life")st.used++;say("记录【"+n+"】（本轮"+st.rec.length+"个"+(st.mode==="life"?" · 全局额度"+st.used+"/4":"")+")");}
+function $id(i){return document.getElementById(i);}
+function render(){
+  $id("kpRound").textContent=st.round;
+  $id("kpQuota").textContent=st.mode==="life"?("全局记录额度 "+st.used+"/4（剩余"+(4-st.used)+"）"):"本轮槽位 "+st.rec.length+"/4（剩余"+(4-st.rec.length)+"）";
+  $id("kpLast").textContent=st.last.length?("上轮记录：【"+st.last.join("】【")+"】（本轮这些牌名不可记）"):"上轮记录：无";
+  var p=$id("kpPool");p.innerHTML=POOL.map(function(n){var bad=canRecord(n);return '<button class="cardname" data-kpname="'+esc(n)+'"'+(bad?' style="opacity:.35"':'')+'>'+esc(n)+'</button>'}).join("")+(st.awake===1?'<div style="color:#8a1f1f;font-size:12.5px;margin-top:6px">〖火计〗使命达成，〖看破〗已失去——记录功能停用</div>':'');
+  var r=$id("kpRec");
+  if(!st.rec.length){r.innerHTML='<span style="color:#a89878">本轮暂无记录</span>';}
+  else{var cnt={},order=[];st.rec.forEach(function(n){if(cnt[n]===undefined){cnt[n]=0;order.push(n)}cnt[n]++});
+    r.innerHTML=order.map(function(n){return '<div style="display:inline-flex;align-items:center;gap:6px;margin:2px 10px 2px 0;padding:4px 10px;border:1px solid #d8cdb8;border-radius:8px;background:#fff">【'+esc(n)+'】×'+cnt[n]+'<button class="ghost" style="padding:2px 10px;font-size:12px" data-kpuse="'+esc(n)+'">看破！</button></div>'}).join("")+'<div style="font-size:12px;color:#8a7a5e;margin-top:4px">看破=移除一个该牌名记录 + 令此牌无效 + 摸一张牌（名额不返还）</div>';}
+  $id("kpFireStat").textContent="累计火焰伤害 "+st.fireDmg+" / 目标 "+st.fireX;
+  $id("kpFireState").textContent=st.awake===1?"使命达成 ✓（失去火计/看破，获得观星/空城——按牌面换将处理）":(st.awake===2?"使命失败：〖火计〗本局无效（看破仍可用）":"未完成使命前进入濒死=失败");
+  document.getElementById("kpModeLife").checked=(st.mode==="life");
+  document.getElementById("kpModeRound").checked=(st.mode!=="life");
+  $id("kpLog").innerHTML=st.log.length?st.log.map(esc).join('<br>'):'尚无记录';
+}
+$id("kpPool").addEventListener("click",function(ev){var b=ev.target.closest("[data-kpname]");if(!b)return;record(b.getAttribute("data-kpname"));});
+$id("kpCustomAdd").onclick=function(){record($id("kpCustom").value);$id("kpCustom").value="";};
+$id("kpRec").addEventListener("click",function(ev){var b=ev.target.closest("[data-kpuse]");if(!b)return;var n=b.getAttribute("data-kpuse");var i=st.rec.indexOf(n);if(i>=0)st.rec.splice(i,1);say("看破【"+n+"】：移除该记录，此牌无效并摸一张");});
+$id("kpNextRound").onclick=function(){var u={};st.last=st.rec.filter(function(n){if(u[n])return false;u[n]=1;return true});st.rec=[];st.round++;say("第"+st.round+"轮开始：清除记录；上轮牌名"+(st.last.length?"【"+st.last.join("】【")+"】":"（无）"));};
+$id("kpModeLife").onchange=function(){st.mode="life";save();render();};
+$id("kpModeRound").onchange=function(){st.mode="round";save();render();};
+$id("kpFireAdd").onclick=function(){st.fireDmg+=1;save();render();};
+$id("kpFireAdd2").onclick=function(){st.fireDmg+=2;save();render();};
+$id("kpFireSub").onclick=function(){if(st.fireDmg>0)st.fireDmg--;save();render();};
+$id("kpX").onchange=function(){var v=parseInt(this.value||"8",10);if(v>0){st.fireX=v;save();render();}};
+$id("kpAwake").onclick=function(){st.awake=1;say("火计使命达成：失去〖火计〗〖看破〗，获得〖观星〗〖空城〗");};
+$id("kpFail").onclick=function(){st.awake=2;say("火计使命失败（濒死）：〖火计〗本局无效");};
+$id("kpReset").onclick=function(){st.round=1;st.last=[];st.rec=[];st.used=0;st.awake=0;st.fireDmg=0;st.log=[];save();render();};
+render();
+window.__kp={st:st,POOL:POOL,record:record,canRecord:canRecord,slotsLeft:slotsLeft,nextRound:function(){$id("kpNextRound").click()},render:render};
+})();
+
+/* ================= 神曹丕 · 刻名 ================= */
+(function(){
+var CAOP=[
+["奸雄","曹操（界）","当你受到伤害后，你可以获得对你造成伤害的牌并摸一张牌。",""],
+["放逐","曹丕","当你受到伤害后，你可以令一名其他角色摸X张牌（X为你已损失的体力值）并翻面。",""],
+["称象","曹冲（界）","当你受到伤害后，你可以亮出牌堆顶的四张牌，获得其中任意张点数之和不大于13的牌。",""],
+["归心","神曹操","当你受到1点伤害后，你可以随机获得每名其他角色区域里的一张牌，然后你翻面。",""],
+["恢拓","曹叡（界）","当你受到伤害后，你可以令一名角色进行一次判定，若结果为：红色，其回复1点体力；黑色，其摸X张牌（X为此次伤害的伤害值）。",""],
+["潜龙","曹髦","当你受到伤害后，你可以展示牌堆顶的三张牌，获得其中的任意张牌（至多为你已损失的体力值数张），然后将剩余的牌以任意顺序置于牌堆底。",""],
+["妩艳","曹媛","出牌阶段，或当你受到伤害后，你可以令一名男性角色选择是否对你选择的另一名其他角色使用一张手牌（无距离与次数限制）。若其：使用牌，你摸两张牌；未使用牌或未造成伤害，你可以令其失去1点体力且此技能本阶段失效。","取『受到伤害后』分支"],
+["隅泣","曹金玉","每回合限两次，当一名角色受到伤害后，若你计算与其的距离不大于0，你可以观看牌堆顶的3张牌，将其中至多1张牌交给该角色，获得其中至多1张牌，然后剩余的牌放回牌堆顶。","含你自身受伤（距离≤0）"],
+["酒诗","曹植（界）","①当你需要使用【酒】时，若你的武将牌正面朝上，你可以翻面，视为使用一张【酒】；②当你受到伤害后，若此时与你受到此伤害时你的武将牌均背面朝上，你可以翻面；③当你使用【酒】后，直到你的回合结束，你于出牌阶段内使用【杀】的次数上限+1。","此时机执行②（需背面朝上条件）"]
+];
+var st;try{st=JSON.parse(localStorage.getItem('keming_state_v1'))||null}catch(e){st=null}
+if(!st||typeof st!=='object'||!st.pend)st={last:-1,pend:[],total:0,log:[]};
+function save(){localStorage.setItem('keming_state_v1',JSON.stringify(st));}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $id(i){return document.getElementById(i);}
+function cardHtml(e){return '<div class="cand" style="cursor:default"><div class="c-name">〖'+e[0]+'〗<span class="c-src"> · '+e[1]+'</span></div><div class="c-desc" style="font-size:12.5px;margin:4px 0">'+esc(e[2])+'</div>'+(e[3]?'<div style="font-size:12px;color:#b8860b">※ '+esc(e[3])+'</div>':'')+'</div>';}
+function roll(){var i=rint(CAOP.length);st.last=i;st.log.push("刻名①随机发动：〖"+CAOP[i][0]+"〗（"+CAOP[i][1]+"）");if(st.log.length>80)st.log=st.log.slice(-80);save();render();return i;}
+function render(){
+  $id("cmiResult").innerHTML=st.last<0?'<span style="color:#a89878;font-size:13px">（尚未抽过）</span>':cardHtml(CAOP[st.last]);
+  $id("cmiStat").textContent=st.last<0?"池 9 · 每次独立随机":"上次：〖"+CAOP[st.last][0]+"〗（真随机，可能重复）";
+  $id("cmiPool").innerHTML=CAOP.map(function(e,i){return '<div style="border-bottom:1px dashed #e3dccb;padding:6px 0">'+(i+1)+'. '+cardHtml(e)+'</div>'}).join("");
+  var p=$id("cmiPend");
+  p.innerHTML=st.pend.length?st.pend.map(function(w,i){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0;padding:6px 10px;border:1px solid #d8cdb8;border-radius:8px;background:#fff;flex-wrap:wrap"><b>'+esc(w)+'</b><span style="font-size:12px;color:#8a7a5e">其下次发动准备/结束/出牌阶段技能后：</span><input type="number" class="cmiN" data-ni="'+i+'" value="1" min="0" max="9" style="width:56px;padding:4px;border:1px solid #c9bfa8;border-radius:6px"><button class="ghost cmiGain" data-i="'+i+'" style="padding:3px 10px;font-size:12px">因该技能摸/用了牌→拿同名牌</button><button class="ghost cmiEnd" data-i="'+i+'" style="padding:3px 10px;font-size:12px">未摸/用牌→追踪结束</button></div>'}).join(""):'<span style="color:#a89878">无挂起目标</span>';
+  $id("cmiTotal").textContent="累计获得同名牌 "+st.total+" 张";
+  $id("cmiLog").innerHTML=st.log.length?st.log.map(esc).join('<br>'):'尚无记录';
+}
+$id("cmiRoll").onclick=roll;
+$id("cmiAdd").onclick=function(){var w=$id("cmiWho").value.trim()||("角色"+(st.pend.length+1));st.pend.push(w);st.log.push("刻名②挂起："+w+"（下次其时机技能后结算）");if(st.log.length>80)st.log=st.log.slice(-80);save();render();$id("cmiWho").value="";};
+$id("cmiPend").addEventListener("click",function(ev){var g=ev.target.closest(".cmiGain");var b2=ev.target.closest(".cmiEnd");
+  if(g){var i=+g.getAttribute("data-i");var w=st.pend[i];var inp=$id("cmiPend").querySelector('.cmiN[data-ni="'+i+'"]');var n=inp?(parseInt(inp.value,10)||0):0;var gain=Math.min(n,5);st.total+=gain;st.pend.splice(i,1);st.log.push("刻名②："+w+" → 获得"+gain+"张同名牌（其摸/用"+n+"张，封顶5）");if(st.log.length>80)st.log=st.log.slice(-80);save();render();}
+  else if(b2){var j=+b2.getAttribute("data-i");var w2=st.pend[j];st.pend.splice(j,1);st.log.push("刻名②："+w2+" 下次技能未摸/用牌，追踪结束");if(st.log.length>80)st.log=st.log.slice(-80);save();render();}});
+$id("cmiReset").onclick=function(){st.last=-1;st.pend=[];st.total=0;st.log=[];save();render();};
+render();
+window.__cmi={st:st,CAOP:CAOP,roll:roll,render:render};
+})();
+
 </script>
 </body>
 </html>
