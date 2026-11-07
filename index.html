@@ -1225,7 +1225,7 @@ function rollSkill(fromPool,label){
   st.log.push(label+"随机获得〖"+e[0]+"〗"+(dup?"（已持有，重复获得，无变化）":(isNew?"":"（再次获得）")));
   bumpLog();save();render();return e;
 }
-function cardHtml(e){return '<div class="cand" style="cursor:default"><div class="c-name">'+esc(e[0])+(e[1]?'<span class="c-src"> · '+esc(e[1])+'</span>':'')+'</div><div class="c-desc" style="font-size:12.5px;margin:4px 0">'+esc(e[2])+'</div></div>';}
+function cardHtml(e){return '<div class="cand" style="cursor:default;border-color:#b8860b"><div class="c-name">'+esc(e[0])+(e[1]?'<span class="c-src"> · '+esc(e[1])+'</span>':'')+'</div><div class="c-desc" style="font-size:12.5px;margin:4px 0">'+esc(e[2])+'</div></div>';}
 function render(){
   var el=document.getElementById("sqLine");
   var ols=openLines();
@@ -1281,7 +1281,7 @@ function render(){
   var r=$id("kpRec");
   if(!st.rec.length){r.innerHTML='<span style="color:#a89878">本轮暂无记录</span>';}
   else{var cnt={},order=[];st.rec.forEach(function(n){if(cnt[n]===undefined){cnt[n]=0;order.push(n)}cnt[n]++});
-    r.innerHTML=order.map(function(n){return '<div style="display:inline-flex;align-items:center;gap:6px;margin:2px 10px 2px 0;padding:4px 10px;border:1px solid #d8cdb8;border-radius:8px;background:#fff">【'+esc(n)+'】×'+cnt[n]+'<button class="ghost" style="padding:2px 10px;font-size:12px" data-kpuse="'+esc(n)+'">看破！</button></div>'}).join("")+'<div style="font-size:12px;color:#8a7a5e;margin-top:4px">看破=移除一个该牌名记录 + 令此牌无效 + 摸一张牌（名额不返还）</div>';}
+    r.innerHTML=order.map(function(n){return '<div style="display:inline-flex;align-items:center;gap:6px;margin:2px 10px 2px 0;padding:4px 10px;border:1px solid #b8860b;border-radius:8px;background:#fff">【'+esc(n)+'】×'+cnt[n]+'<button class="ghost" style="padding:2px 10px;font-size:12px" data-kpuse="'+esc(n)+'">看破！</button></div>'}).join("")+'<div style="font-size:12px;color:#8a7a5e;margin-top:4px">看破=移除一个该牌名记录 + 令此牌无效 + 摸一张牌（名额不返还）</div>';}
   $id("kpFireStat").textContent="累计火焰伤害 "+st.fireDmg+" / 目标 "+st.fireX;
   $id("kpFireState").textContent=st.awake===1?"使命达成 ✓（失去火计/看破，获得观星/空城——按牌面换将处理）":(st.awake===2?"使命失败：〖火计〗本局无效（看破仍可用）":"未完成使命前进入濒死=失败");
   document.getElementById("kpModeLife").checked=(st.mode==="life");
@@ -1323,14 +1323,14 @@ if(!st||typeof st!=='object'||!st.pend)st={last:-1,pend:[],total:0,log:[]};
 function save(){localStorage.setItem('keming_state_v1',JSON.stringify(st));}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function $id(i){return document.getElementById(i);}
-function cardHtml(e){return '<div class="cand" style="cursor:default"><div class="c-name">〖'+e[0]+'〗<span class="c-src"> · '+e[1]+'</span></div><div class="c-desc" style="font-size:12.5px;margin:4px 0">'+esc(e[2])+'</div>'+(e[3]?'<div style="font-size:12px;color:#b8860b">※ '+esc(e[3])+'</div>':'')+'</div>';}
+function cardHtml(e,g){return '<div class="cand" style="cursor:default'+(g?';border-color:#b8860b':'')+'"><div class="c-name">〖'+e[0]+'〗<span class="c-src"> · '+e[1]+'</span></div><div class="c-desc" style="font-size:12.5px;margin:4px 0">'+esc(e[2])+'</div>'+(e[3]?'<div style="font-size:12px;color:#b8860b">※ '+esc(e[3])+'</div>':'')+'</div>';}
 function roll(){var i=rint(CAOP.length);st.last=i;st.log.push("刻名①随机发动：〖"+CAOP[i][0]+"〗（"+CAOP[i][1]+"）");if(st.log.length>80)st.log=st.log.slice(-80);save();render();return i;}
 function render(){
-  $id("cmiResult").innerHTML=st.last<0?'<span style="color:#a89878;font-size:13px">（尚未抽过）</span>':cardHtml(CAOP[st.last]);
+  $id("cmiResult").innerHTML=st.last<0?'<span style="color:#a89878;font-size:13px">（尚未抽过）</span>':cardHtml(CAOP[st.last],1);
   $id("cmiStat").textContent=st.last<0?"池 9 · 每次独立随机":"上次：〖"+CAOP[st.last][0]+"〗（真随机，可能重复）";
   $id("cmiPool").innerHTML=CAOP.map(function(e,i){return '<div style="border-bottom:1px dashed #e3dccb;padding:6px 0">'+(i+1)+'. '+cardHtml(e)+'</div>'}).join("");
   var p=$id("cmiPend");
-  p.innerHTML=st.pend.length?st.pend.map(function(w,i){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0;padding:6px 10px;border:1px solid #d8cdb8;border-radius:8px;background:#fff;flex-wrap:wrap"><b>'+esc(w)+'</b><span style="font-size:12px;color:#8a7a5e">其下次发动准备/结束/出牌阶段技能后：</span><input type="number" class="cmiN" data-ni="'+i+'" value="1" min="0" max="9" style="width:56px;padding:4px;border:1px solid #c9bfa8;border-radius:6px"><button class="ghost cmiGain" data-i="'+i+'" style="padding:3px 10px;font-size:12px">因该技能摸/用了牌→拿同名牌</button><button class="ghost cmiEnd" data-i="'+i+'" style="padding:3px 10px;font-size:12px">未摸/用牌→追踪结束</button></div>'}).join(""):'<span style="color:#a89878">无挂起目标</span>';
+  p.innerHTML=st.pend.length?st.pend.map(function(w,i){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0;padding:6px 10px;border:1px solid #b8860b;border-radius:8px;background:#fff;flex-wrap:wrap"><b>'+esc(w)+'</b><span style="font-size:12px;color:#8a7a5e">其下次发动准备/结束/出牌阶段技能后：</span><input type="number" class="cmiN" data-ni="'+i+'" value="1" min="0" max="9" style="width:56px;padding:4px;border:1px solid #c9bfa8;border-radius:6px"><button class="ghost cmiGain" data-i="'+i+'" style="padding:3px 10px;font-size:12px">因该技能摸/用了牌→拿同名牌</button><button class="ghost cmiEnd" data-i="'+i+'" style="padding:3px 10px;font-size:12px">未摸/用牌→追踪结束</button></div>'}).join(""):'<span style="color:#a89878">无挂起目标</span>';
   $id("cmiTotal").textContent="累计获得同名牌 "+st.total+" 张";
   $id("cmiLog").innerHTML=st.log.length?st.log.map(esc).join('<br>'):'尚无记录';
 }
