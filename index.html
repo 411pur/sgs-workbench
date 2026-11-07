@@ -422,7 +422,6 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <div class="toolbar"><button id="cmiRoll">受到伤害 → 随机发动曹技</button><span class="stat" id="cmiStat"></span></div>
 <div id="cmiResult" style="margin-top:8px"></div>
 <div style="font-size:12.5px;color:#8a7a5e;margin-top:6px">先按牌面：若伤害来源武将牌上有"受到伤害后"技能，直接发动那个（不需要本页）；没有时才点上面的按钮随机抽。</div></div>
-<div class="panel"><h2>曹姓技能池（9 · 官方口径，均含"受到伤害后"时机）</h2><div id="cmiPool" style="font-size:13px;line-height:1.9"></div></div>
 <div class="panel"><h2>刻名② · 造成伤害后 同名牌获取登记</h2>
 <div class="toolbar"><input id="cmiWho" placeholder="角色名/座位号" style="padding:8px;border:1px solid #c9bfa8;border-radius:6px;width:160px"><button id="cmiAdd">对其造成伤害，挂起追踪</button><span class="stat" id="cmiTotal"></span></div>
 <div id="cmiPend" style="font-size:13.5px;line-height:2.2;margin-top:6px"></div></div>
@@ -1328,7 +1327,6 @@ function roll(){var i=rint(CAOP.length);st.last=i;st.log.push("刻名①随机�
 function render(){
   $id("cmiResult").innerHTML=st.last<0?'<span style="color:#a89878;font-size:13px">（尚未抽过）</span>':cardHtml(CAOP[st.last],1);
   $id("cmiStat").textContent=st.last<0?"池 9 · 每次独立随机":"上次：〖"+CAOP[st.last][0]+"〗（真随机，可能重复）";
-  $id("cmiPool").innerHTML=CAOP.map(function(e,i){return '<div style="border-bottom:1px dashed #e3dccb;padding:6px 0">'+(i+1)+'. '+cardHtml(e)+'</div>'}).join("");
   var p=$id("cmiPend");
   p.innerHTML=st.pend.length?st.pend.map(function(w,i){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0;padding:6px 10px;border:1px solid #b8860b;border-radius:8px;background:#fff;flex-wrap:wrap"><b>'+esc(w)+'</b><span style="font-size:12px;color:#8a7a5e">其下次发动准备/结束/出牌阶段技能后：</span><input type="number" class="cmiN" data-ni="'+i+'" value="1" min="0" max="9" style="width:56px;padding:4px;border:1px solid #c9bfa8;border-radius:6px"><button class="ghost cmiGain" data-i="'+i+'" style="padding:3px 10px;font-size:12px">因该技能摸/用了牌→拿同名牌</button><button class="ghost cmiEnd" data-i="'+i+'" style="padding:3px 10px;font-size:12px">未摸/用牌→追踪结束</button></div>'}).join(""):'<span style="color:#a89878">无挂起目标</span>';
   $id("cmiTotal").textContent="累计获得同名牌 "+st.total+" 张";
