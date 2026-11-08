@@ -94,6 +94,7 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 .mao-pop-name{font-size:26px;color:#8a1f1f;font-weight:bold;letter-spacing:5px;margin-bottom:10px}
 .mao-pop-desc{font-size:14px;line-height:1.9;color:#4a4234;margin-bottom:12px}
 .mao-pop-talk{font-size:13px;color:#6a5a3e;border-top:1px dashed #ddd3bf;padding-top:10px;margin-bottom:14px;line-height:1.9}
+.s-hit{padding:4px 8px;border-radius:6px;cursor:pointer}.s-hit:hover{background:#f5efe2}
 </style>
 </head>
 <body>
@@ -105,6 +106,11 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <h1>三国杀 · 技能工作台</h1>
   <div class="sub">选择一个模块开始 —— 各模块技能池相互独立，记录互不干扰</div>
 </header>
+<div class="panel" style="margin-bottom:14px">
+<h2>检索</h2>
+<div class="toolbar"><input id="homeSearch" placeholder="搜模块 / 技能 / 牌名，如：滔乱、矜功、美人计、道心、看破" style="flex:1;min-width:200px;padding:9px;border:1px solid #c9bfa8;border-radius:8px"><button id="homeSearchClear" class="ghost">清空</button></div>
+<div id="searchRes" style="font-size:13.5px;line-height:1.9"></div>
+</div>
 <div class="home-grid">
   <div class="home-card red" data-go="chen">
     <div class="h-icon">点</div>
@@ -160,6 +166,16 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <div class="h-icon">名</div>
   <div class="h-title">神曹丕 · 刻名</div>
   <div class="h-desc">神 · 4勾玉 · 月晦书轮回<br>受伤→随机发动曹姓武将技能（官方9技池）<br>②同名牌获取登记 · 至多5张</div>
+</div>
+<div class="home-card blue" data-go="jg">
+  <div class="h-icon">允</div>
+  <div class="h-title">王允 · 矜功三选一</div>
+  <div class="h-desc">群 · 荟萃-计将安出 · 觉醒后〖矜功〗<br>随机三张普通锦囊，点选一张使用<br>美人计/笑里藏刀必占其一 · 出牌阶段限一次</div>
+</div>
+<div class="home-card red" data-go="tl">
+  <div class="h-icon">宦</div>
+  <div class="h-title">张让 · 滔乱登记</div>
+  <div class="h-desc">群 · 荟萃-戚宦之争 · 当任意基本/普通锦囊<br>每种牌名限一次 · 点过即锁<br>防重复声明记录器</div>
 </div>
 <div class="home-card grey" data-go="rng">
     <div class="h-icon">数</div>
@@ -427,6 +443,31 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <div id="cmiPend" style="font-size:13.5px;line-height:2.2;margin-top:6px"></div></div>
 <div class="panel"><h2>操作记录</h2><div class="toolbar"><button class="ghost" id="cmiReset">重置本局</button></div><div id="cmiLog" class="stat" style="line-height:2;max-height:200px;overflow:auto">尚无记录</div></div>
 <footer>技能池来源：biligame《三国杀》wiki「神曹丕技能池」页（界突破以后版本为准）；〖酒诗〗此时机执行②、〖妩艳〗执行"受到伤害后"分支 · 来源页更新于2026-10-10</footer>
+</div>
+
+<!-- 王允·矜功三选一视图 -->
+<div id="view-jg" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>王允 · 矜功三选一</h1><div class="vsub">群 · 3勾玉 · 忠魂不泯 —— 技能在牌上；本页做〖矜功〗三选一抽取：三张由一张【美人计】或【笑里藏刀】＋两张普通锦囊构成，点选一张即记录使用。</div></div></div>
+<div class="panel"><h2>矜功 · 抽取三张</h2>
+<div class="toolbar"><button id="jgDraw" class="cardname">抽取三张普通锦囊</button><span class="stat" id="jgStat">本回合未发动</span><button id="jgNext" class="ghost">新回合（解锁抽取）</button></div>
+<div id="jgCand" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"></div>
+<div style="font-size:12.5px;color:#8a7a5e;margin-top:8px">抽取构成（官方规则集问答）：一张【美人计】或【笑里藏刀】＋两张普通锦囊（不含【无懈可击】）；若加入逐鹿扩展还应除去【草船借箭】——本页牌池未收录草船借箭。</div></div>
+<div class="panel"><h2>本局发动记录</h2><div id="jgRec" style="font-size:13.5px;line-height:2.2"></div>
+<div class="toolbar"><button id="jgUndo" class="ghost">撤销上次发动</button><button id="jgReset" class="ghost">清空本局</button></div></div>
+<div class="panel"><h2>操作记录</h2><div id="jgLog" class="stat" style="line-height:2;max-height:180px;overflow:auto">尚无记录</div></div>
+<footer>觉醒时机、两个选项是否均被选择等判定以实体牌为准；本页只做三选一抽取与使用记录。</footer>
+</div>
+
+<!-- 张让·滔乱登记视图 -->
+<div id="view-tl" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>张让 · 滔乱登记</h1><div class="vsub">群 · 窃幸绝禋 —— 技能在牌上；本页做〖滔乱〗声明牌名登记：每种牌名限一次，点过的牌名自动锁定，防印重复的牌。</div></div></div>
+<div class="panel"><h2>点牌名即声明（基本牌 4 + 普通锦囊 17）</h2><div id="tlPool"></div>
+<div class="toolbar"><input id="tlCustom" placeholder="自定义牌名（牌堆里有的基本/普通锦囊牌名都行）" style="padding:8px;border:1px solid #c9bfa8;border-radius:6px;width:220px"><button id="tlCustomAdd" class="ghost">声明自定义</button></div>
+<div style="font-size:12.5px;color:#8a7a5e;margin-top:8px">口径：滔乱只能当基本牌或普通锦囊牌——延时锦囊（乐不思蜀、闪电）不在池内；「每种花色每回合限一次」线下自行核对。逐鹿包【草船借箭】可用下方自定义声明。</div></div>
+<div class="panel"><h2>本局已声明（点 ✕ 撤销，再点同名牌名会被拦截）</h2><div id="tlUsed" style="font-size:13.5px;line-height:2.4"></div>
+<div class="toolbar"><button id="tlNewGame" class="ghost">新的一局（清空）</button></div></div>
+<div class="panel"><h2>操作记录</h2><div id="tlLog" class="stat" style="line-height:2;max-height:180px;overflow:auto">尚无记录</div></div>
+<footer>滔乱结算（对方交牌 / 本回合失效分支）以实体牌为准；本页只登记声明过的牌名。</footer>
 </div>
 
 <div id="view-rng" class="hidden">
@@ -1340,6 +1381,161 @@ $id("cmiPend").addEventListener("click",function(ev){var g=ev.target.closest(".c
 $id("cmiReset").onclick=function(){st.last=-1;st.pend=[];st.total=0;st.log=[];save();render();};
 render();
 window.__cmi={st:st,CAOP:CAOP,roll:roll,render:render};
+})();
+
+/* ================= 王允 · 矜功三选一 ================= */
+(function(){
+var SPEC=["美人计","笑里藏刀"];
+var MAIN=["决斗","万箭齐发","南蛮入侵","过河拆桥","顺手牵羊","无中生有","兵粮寸断","桃园结义","五谷丰登","铁索连环","借刀杀人","火攻","水淹七军","落井下石"];
+var st;try{st=JSON.parse(localStorage.getItem('jg_state_v1'))||null}catch(e){st=null}
+if(!st||typeof st!=='object'||!st.rec)st={cand:[],picked:-1,fired:0,rec:[],log:[]};
+function save(){localStorage.setItem('jg_state_v1',JSON.stringify(st));}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $id(i){return document.getElementById(i);}
+function say(m){st.log.push(m);if(st.log.length>80)st.log=st.log.slice(-80);}
+function draw(){
+  if(st.fired){say("本回合已发动过矜功（出牌阶段限一次）");save();render();return;}
+  var s=SPEC[rint(SPEC.length)];
+  var i1=rint(MAIN.length),i2=rint(MAIN.length-1);if(i2>=i1)i2++;
+  var arr=[s,MAIN[i1],MAIN[i2]];
+  for(var k=arr.length-1;k>0;k--){var j=rint(k+1),t=arr[k];arr[k]=arr[j];arr[j]=t;}
+  st.cand=arr;st.picked=-1;st.fired=0;
+  say("矜功抽取：三张＝【"+arr.join("】【")+"】");
+  save();render();
+}
+function pick(i){
+  if(st.fired||st.picked>=0)return;
+  if(!st.cand[i])return;
+  st.picked=i;st.fired=1;
+  st.rec.push({c:st.cand.slice(),p:i});
+  say("矜功发动：将【杀】/装备牌当【"+st.cand[i]+"】使用");
+  if(st.log.length>80)st.log=st.log.slice(-80);
+  save();render();
+}
+function undoLast(){
+  if(!st.rec.length)return;
+  var r=st.rec.pop();
+  st.cand=r.c;st.picked=-1;st.fired=0;
+  say("撤销上次矜功发动");
+  save();render();
+}
+function nextRound(){st.cand=[];st.picked=-1;st.fired=0;say("新回合开始");save();render();}
+function reset(){st.cand=[];st.picked=-1;st.fired=0;st.rec=[];st.log=[];save();render();}
+function render(){
+  $id("jgStat").textContent=st.fired?"本回合已发动（出牌阶段限一次）":(st.cand.length?"三张已生成：点选一张使用":"本回合未发动");
+  $id("jgCand").innerHTML=st.cand.length?st.cand.map(function(n,i){
+    var g=st.picked===i;
+    return '<div class="cand" data-jgpick="'+i+'" style="cursor:pointer;'+(g?'border-color:#b8860b;box-shadow:0 0 0 2px rgba(184,134,11,.25)':'')+'"><div class="c-name">【'+esc(n)+'】</div><div class="c-desc" style="font-size:12px;color:#8a7a5e">'+(g?'已选用':'将【杀】/装备牌当此牌用')+'</div></div>';
+  }).join(""):'<span style="color:#a89878;font-size:13px">（尚未抽取）</span>';
+  $id("jgRec").innerHTML=st.rec.length?st.rec.map(function(r,i){
+    return '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">第'+(i+1)+'次：三张【'+r.c.map(esc).join("】【")+"】 → 使用【"+esc(r.c[r.p])+"】"+(i===st.rec.length-1?'<button class="ghost" data-jgundo="1" style="padding:2px 10px;font-size:12px">撤销</button>':'')+'</div>';
+  }).join(""):'<span style="color:#a89878">本局尚未发动</span>';
+  $id("jgLog").innerHTML=st.log.length?st.log.map(esc).join("<br>"):"尚无记录";
+}
+$id("jgDraw").onclick=draw;
+$id("jgCand").addEventListener("click",function(ev){var b=ev.target.closest("[data-jgpick]");if(b)pick(+b.getAttribute("data-jgpick"));});
+$id("jgRec").addEventListener("click",function(ev){var b=ev.target.closest("[data-jgundo]");if(b)undoLast();});
+$id("jgUndo").onclick=undoLast;
+$id("jgNext").onclick=nextRound;
+$id("jgReset").onclick=reset;
+render();
+window.__jg={st:st,SPEC:SPEC,MAIN:MAIN,draw:draw,pick:pick,render:render};
+})();
+
+/* ================= 张让 · 滔乱登记 ================= */
+(function(){
+var BASIC=["杀","闪","桃","酒"];
+var TRICK=["决斗","万箭齐发","南蛮入侵","过河拆桥","顺手牵羊","无中生有","兵粮寸断","桃园结义","五谷丰登","铁索连环","借刀杀人","火攻","水淹七军","无懈可击","落井下石","美人计","笑里藏刀"];
+var POOL=BASIC.concat(TRICK);
+var st;try{st=JSON.parse(localStorage.getItem('tl_state_v1'))||null}catch(e){st=null}
+if(!st||typeof st!=='object'||!st.used)st={used:[],log:[]};
+function save(){localStorage.setItem('tl_state_v1',JSON.stringify(st));}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $id(i){return document.getElementById(i);}
+function say(m){st.log.push(m);if(st.log.length>80)st.log=st.log.slice(-80);}
+function record(n){
+  n=String(n||"").trim();if(!n)return;
+  if(st.used.indexOf(n)>=0){say("拦截：〖"+n+"〗本局已声明过——滔乱每种牌名限一次");save();render();return;}
+  st.used.push(n);say("滔乱声明：【"+n+"】（本局第 "+st.used.length+" 种牌名）");
+  save();render();
+}
+function undoName(n){
+  var i=st.used.indexOf(n);
+  if(i<0)return;
+  st.used.splice(i,1);say("撤销声明：【"+n+"】");
+  save();render();
+}
+function newGame(){st.used=[];st.log=[];save();render();}
+function render(){
+  $id("tlPool").innerHTML=POOL.map(function(n){
+    var bad=st.used.indexOf(n)>=0;
+    return '<button class="cardname" data-tlname="'+esc(n)+'"'+(bad?' style="opacity:.35"':'')+'>'+esc(n)+'</button>';
+  }).join("");
+  $id("tlUsed").innerHTML=st.used.length?st.used.map(function(n){
+    return '<button class="cardname" data-tlundo="'+esc(n)+'" style="opacity:.55">'+esc(n)+' ✕</button>';
+  }).join(" "):'<span style="color:#a89878">本局尚未声明</span>';
+  $id("tlLog").innerHTML=st.log.length?st.log.map(esc).join("<br>"):"尚无记录";
+}
+$id("tlPool").addEventListener("click",function(ev){var b=ev.target.closest("[data-tlname]");if(b)record(b.getAttribute("data-tlname"));});
+$id("tlUsed").addEventListener("click",function(ev){var b=ev.target.closest("[data-tlundo]");if(b)undoName(b.getAttribute("data-tlundo"));});
+$id("tlCustomAdd").onclick=function(){record($id("tlCustom").value);$id("tlCustom").value="";};
+$id("tlNewGame").onclick=newGame;
+render();
+window.__tl={st:st,POOL:POOL,record:record,undoName:undoName,render:render};
+})();
+
+/* ================= 全站检索 ================= */
+(function(){
+var IDX=[
+{id:"chen",t:"陈寿 · 点墨",k:"陈寿 点墨 转化 二选一 青史翰墨 春秋笔 婉而成章"},
+{id:"hun",t:"魂 · 五虎上将",k:"魂五虎 五虎 武魂 定向 关羽 张飞 赵云 马超 黄忠 杀闪桃酒"},
+{id:"wuyi",t:"地主 · 吴懿",k:"吴懿 地主 斗地主 名将 技能 台词 谐音 读法"},
+{id:"quyuan",t:"屈原 · 离骚填空",k:"屈原 离骚 楚辞 填空 诗句 名句 上下句"},
+{id:"mao",t:"曹髦 · 道心",k:"曹髦 道心 值 清正 酒诗 放逐 决进 节点 解锁 向死存魏"},
+{id:"youzhuge",t:"友诸葛 · 卧龙演策",k:"友诸葛 卧龙演策 预测 类别 颜色 声明 友庞统 友徐庶 方遒 结算"},
+{id:"zhengsu",t:"整肃",k:"整肃 擂进 变阵 鸣止 任务 奖励 通用机制 流程器"},
+{id:"xuxu",t:"荀彧&荀攸 · 智囊",k:"荀彧 荀攸 智囊 谋 技能池 谋定天下 苟渚 锦囊装备"},
+{id:"sq",t:"神孙权 · 东吴命运线",k:"神孙权 东吴 命运线 驭衡 帝力 穹览 圣质 持纲 穹觛 权道 交辉 渊虑"},
+{id:"kp",t:"谋诸葛亮 · 看破记录",k:"谋诸葛亮 看破 火计 使命 计数 牌名 额度 轮次 非装备"},
+{id:"cmi",t:"神曹丕 · 刻名",k:"神曹丕 刻名 同名牌 曹姓 随机发动 受伤 挂起 追踪"},
+{id:"jg",t:"王允 · 矜功三选一",k:"王允 连计 谋逞 矜功 三选一 随机三张 普通锦囊 美人计 笑里藏刀 觉醒"},
+{id:"tl",t:"张让 · 滔乱登记",k:"张让 滔乱 十常侍 宦官 牌名 登记 防重复 声明 基本牌 普通锦囊"},
+{id:"rng",t:"随机数",k:"随机数 整数 小数 上下限"}
+];
+function $id(i){return document.getElementById(i);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function title(id){for(var i=0;i<IDX.length;i++)if(IDX[i].id===id)return IDX[i].t;return id;}
+function scanPools(q){
+  var hits=[],ids=["xxy","kp","cmi","sq","jg","tl"];
+  ids.forEach(function(id){
+    var o=window["__"+id];if(!o)return;
+    Object.keys(o).forEach(function(k){
+      var v=o[k];if(!v||!Array.isArray(v))return;
+      v.forEach(function(e){
+        var s="";
+        if(typeof e==="string")s=e;
+        else if(Array.isArray(e)&&typeof e[0]==="string")s=e.slice(0,4).join(" · ");
+        if(!s)return;
+        if(s.indexOf(q)>=0&&hits.length<20&&!hits.some(function(h){return h.id===id&&h.s===s}))hits.push({id:id,s:s});
+      });
+    });
+  });
+  return hits.slice(0,10);
+}
+function render(q){
+  var r=$id("searchRes");
+  q=(q||"").trim();
+  if(!q){r.innerHTML="";return;}
+  var mods=IDX.filter(function(m){return m.t.indexOf(q)>=0||m.k.indexOf(q)>=0;});
+  var ph=scanPools(q);
+  var html="";
+  if(mods.length)html+='<div style="color:#8a7a5e;font-size:12px;margin-top:2px">模块（点击进入）</div>'+mods.map(function(m){return '<div class="s-hit" data-sgo="'+m.id+'"><b>'+esc(m.t)+'</b></div>';}).join("");
+  if(ph.length)html+='<div style="color:#8a7a5e;font-size:12px;margin-top:6px">池内命中（点击进入所在模块）</div>'+ph.map(function(h){return '<div class="s-hit" data-sgo="'+h.id+'" style="font-size:12.5px">'+esc(h.s.slice(0,70))+'<span style="color:#b8860b"> —— '+esc(title(h.id))+'</span></div>';}).join("");
+  r.innerHTML=html||'<span style="color:#a89878">没有匹配的模块或条目</span>';
+}
+$id("homeSearch").addEventListener("input",function(){render(this.value);});
+$id("homeSearchClear").onclick=function(){$id("homeSearch").value="";render("");};
+$id("searchRes").addEventListener("click",function(ev){var b=ev.target.closest("[data-sgo]");if(b)go(b.getAttribute("data-sgo"));});
 })();
 
 </script>
