@@ -170,7 +170,7 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <div class="home-card blue" data-go="jg">
   <div class="h-icon">允</div>
   <div class="h-title">王允 · 矜功三选一</div>
-  <div class="h-desc">群 · 荟萃-计将安出 · 觉醒后〖矜功〗<br>随机三张普通锦囊，点选一张使用<br>美人计/笑里藏刀必占其一 · 出牌阶段限一次</div>
+  <div class="h-desc">群 · 荟萃-计将安出 · 觉醒后〖矜功〗<br>标准军争池随机三张普通锦囊<br>点选一张使用 · 不重复 · 出牌阶段限一次</div>
 </div>
 <div class="home-card red" data-go="tl">
   <div class="h-icon">宦</div>
@@ -447,11 +447,11 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 
 <!-- 王允·矜功三选一视图 -->
 <div id="view-jg" class="hidden">
-<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>王允 · 矜功三选一</h1><div class="vsub">群 · 3勾玉 · 忠魂不泯 —— 技能在牌上；本页做〖矜功〗三选一抽取：三张由一张【美人计】或【笑里藏刀】＋两张普通锦囊构成，点选一张即记录使用。</div></div></div>
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>王允 · 矜功三选一</h1><div class="vsub">群 · 3勾玉 · 忠魂不泯 —— 技能在牌上；本页做〖矜功〗三选一抽取：三张从标准军争牌堆的普通锦囊（除【无懈可击】）随机抽 3 张、互不重复，点选一张即记录使用。</div></div></div>
 <div class="panel"><h2>矜功 · 抽取三张</h2>
 <div class="toolbar"><button id="jgDraw" class="cardname">抽取三张普通锦囊</button><span class="stat" id="jgStat">本回合未发动</span><button id="jgNext" class="ghost">新回合（解锁抽取）</button></div>
 <div id="jgCand" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"></div>
-<div style="font-size:12.5px;color:#8a7a5e;margin-top:8px">抽取构成（官方规则集问答）：一张【美人计】或【笑里藏刀】＋两张普通锦囊（不含【无懈可击】）；若加入逐鹿扩展还应除去【草船借箭】——本页牌池未收录草船借箭。</div></div>
+<div style="font-size:12.5px;color:#8a7a5e;margin-top:8px">牌池口径：标准+军争八人场牌堆的普通锦囊共 12 种，除【无懈可击】后 11 种参与抽取；延时锦囊（乐不思蜀/闪电/兵粮寸断）与美人计、笑里藏刀、草船借箭等扩展牌不在池内。官方规则集问答另载「1张【美人计】或【笑里藏刀】＋2张普通锦囊」构成（君临天下扩展口径），如需按该口径请线下自行调整。</div></div>
 <div class="panel"><h2>本局发动记录</h2><div id="jgRec" style="font-size:13.5px;line-height:2.2"></div>
 <div class="toolbar"><button id="jgUndo" class="ghost">撤销上次发动</button><button id="jgReset" class="ghost">清空本局</button></div></div>
 <div class="panel"><h2>操作记录</h2><div id="jgLog" class="stat" style="line-height:2;max-height:180px;overflow:auto">尚无记录</div></div>
@@ -461,9 +461,9 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <!-- 张让·滔乱登记视图 -->
 <div id="view-tl" class="hidden">
 <div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>张让 · 滔乱登记</h1><div class="vsub">群 · 窃幸绝禋 —— 技能在牌上；本页做〖滔乱〗声明牌名登记：每种牌名限一次，点过的牌名自动锁定，防印重复的牌。</div></div></div>
-<div class="panel"><h2>点牌名即声明（基本牌 4 + 普通锦囊 17）</h2><div id="tlPool"></div>
+<div class="panel"><h2>点牌名即声明（基本牌 4 + 普通锦囊 12）</h2><div id="tlPool"></div>
 <div class="toolbar"><input id="tlCustom" placeholder="自定义牌名（牌堆里有的基本/普通锦囊牌名都行）" style="padding:8px;border:1px solid #c9bfa8;border-radius:6px;width:220px"><button id="tlCustomAdd" class="ghost">声明自定义</button></div>
-<div style="font-size:12.5px;color:#8a7a5e;margin-top:8px">口径：滔乱只能当基本牌或普通锦囊牌——延时锦囊（乐不思蜀、闪电）不在池内；「每种花色每回合限一次」线下自行核对。逐鹿包【草船借箭】可用下方自定义声明。</div></div>
+<div style="font-size:12.5px;color:#8a7a5e;margin-top:8px">口径：滔乱只能当基本牌或普通锦囊牌——池＝标准+军争八人场牌堆的基本牌 4 种＋普通锦囊 12 种；延时锦囊（乐不思蜀/闪电/兵粮寸断）与美人计、笑里藏刀、草船借箭等扩展牌不在池内，可用下方自定义声明；「每种花色每回合限一次」线下自行核对。</div></div>
 <div class="panel"><h2>本局已声明（点 ✕ 撤销，再点同名牌名会被拦截）</h2><div id="tlUsed" style="font-size:13.5px;line-height:2.4"></div>
 <div class="toolbar"><button id="tlNewGame" class="ghost">新的一局（清空）</button></div></div>
 <div class="panel"><h2>操作记录</h2><div id="tlLog" class="stat" style="line-height:2;max-height:180px;overflow:auto">尚无记录</div></div>
@@ -1385,8 +1385,7 @@ window.__cmi={st:st,CAOP:CAOP,roll:roll,render:render};
 
 /* ================= 王允 · 矜功三选一 ================= */
 (function(){
-var SPEC=["美人计","笑里藏刀"];
-var MAIN=["决斗","万箭齐发","南蛮入侵","过河拆桥","顺手牵羊","无中生有","兵粮寸断","桃园结义","五谷丰登","铁索连环","借刀杀人","火攻","水淹七军","落井下石"];
+var MAIN=["决斗","万箭齐发","南蛮入侵","过河拆桥","顺手牵羊","无中生有","桃园结义","五谷丰登","铁索连环","借刀杀人","火攻"];
 var st;try{st=JSON.parse(localStorage.getItem('jg_state_v1'))||null}catch(e){st=null}
 if(!st||typeof st!=='object'||!st.rec)st={cand:[],picked:-1,fired:0,rec:[],log:[]};
 function save(){localStorage.setItem('jg_state_v1',JSON.stringify(st));}
@@ -1395,9 +1394,10 @@ function $id(i){return document.getElementById(i);}
 function say(m){st.log.push(m);if(st.log.length>80)st.log=st.log.slice(-80);}
 function draw(){
   if(st.fired){say("本回合已发动过矜功（出牌阶段限一次）");save();render();return;}
-  var s=SPEC[rint(SPEC.length)];
-  var i1=rint(MAIN.length),i2=rint(MAIN.length-1);if(i2>=i1)i2++;
-  var arr=[s,MAIN[i1],MAIN[i2]];
+  var i1=rint(MAIN.length),i2,i3;
+  do{i2=rint(MAIN.length)}while(i2===i1);
+  do{i3=rint(MAIN.length)}while(i3===i1||i3===i2);
+  var arr=[MAIN[i1],MAIN[i2],MAIN[i3]];
   for(var k=arr.length-1;k>0;k--){var j=rint(k+1),t=arr[k];arr[k]=arr[j];arr[j]=t;}
   st.cand=arr;st.picked=-1;st.fired=0;
   say("矜功抽取：三张＝【"+arr.join("】【")+"】");
@@ -1439,13 +1439,13 @@ $id("jgUndo").onclick=undoLast;
 $id("jgNext").onclick=nextRound;
 $id("jgReset").onclick=reset;
 render();
-window.__jg={st:st,SPEC:SPEC,MAIN:MAIN,draw:draw,pick:pick,render:render};
+window.__jg={st:st,MAIN:MAIN,draw:draw,pick:pick,render:render};
 })();
 
 /* ================= 张让 · 滔乱登记 ================= */
 (function(){
 var BASIC=["杀","闪","桃","酒"];
-var TRICK=["决斗","万箭齐发","南蛮入侵","过河拆桥","顺手牵羊","无中生有","兵粮寸断","桃园结义","五谷丰登","铁索连环","借刀杀人","火攻","水淹七军","无懈可击","落井下石","美人计","笑里藏刀"];
+var TRICK=["决斗","万箭齐发","南蛮入侵","过河拆桥","顺手牵羊","无中生有","桃园结义","五谷丰登","铁索连环","借刀杀人","火攻","无懈可击"];
 var POOL=BASIC.concat(TRICK);
 var st;try{st=JSON.parse(localStorage.getItem('tl_state_v1'))||null}catch(e){st=null}
 if(!st||typeof st!=='object'||!st.used)st={used:[],log:[]};
@@ -1498,7 +1498,7 @@ var IDX=[
 {id:"sq",t:"神孙权 · 东吴命运线",k:"神孙权 东吴 命运线 驭衡 帝力 穹览 圣质 持纲 穹觛 权道 交辉 渊虑"},
 {id:"kp",t:"谋诸葛亮 · 看破记录",k:"谋诸葛亮 看破 火计 使命 计数 牌名 额度 轮次 非装备"},
 {id:"cmi",t:"神曹丕 · 刻名",k:"神曹丕 刻名 同名牌 曹姓 随机发动 受伤 挂起 追踪"},
-{id:"jg",t:"王允 · 矜功三选一",k:"王允 连计 谋逞 矜功 三选一 随机三张 普通锦囊 美人计 笑里藏刀 觉醒"},
+{id:"jg",t:"王允 · 矜功三选一",k:"王允 连计 谋逞 矜功 三选一 随机三张 普通锦囊 觉醒 标准军争"},
 {id:"tl",t:"张让 · 滔乱登记",k:"张让 滔乱 十常侍 宦官 牌名 登记 防重复 声明 基本牌 普通锦囊"},
 {id:"rng",t:"随机数",k:"随机数 整数 小数 上下限"}
 ];
