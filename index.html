@@ -177,6 +177,11 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
   <div class="h-title">张让 · 滔乱登记</div>
   <div class="h-desc">群 · 荟萃-戚宦之争 · 当任意基本/普通锦囊<br>每种牌名限一次 · 点过即锁<br>防重复声明记录器</div>
 </div>
+<div class="home-card gold" data-go="liuyuan">
+  <div class="h-icon">渊</div>
+  <div class="h-title">超级刘渊 · 技能池</div>
+  <div class="h-desc">点牌名弹出可选技能 · 选一个入账<br>19 牌 38 技（整理者评语随选随看）<br>再点可改选 · 记录存本机</div>
+</div>
 <div class="home-card grey" data-go="rng">
     <div class="h-icon">数</div>
     <div class="h-title">随机数</div>
@@ -468,6 +473,21 @@ footer{text-align:center;font-size:12px;color:#a89878;line-height:1.8;margin-top
 <div class="toolbar"><button id="tlNewGame" class="ghost">新的一局（清空）</button></div></div>
 <div class="panel"><h2>操作记录</h2><div id="tlLog" class="stat" style="line-height:2;max-height:180px;overflow:auto">尚无记录</div></div>
 <footer>滔乱结算（对方交牌 / 本回合失效分支）以实体牌为准；本页只登记声明过的牌名。</footer>
+</div>
+
+<div id="view-liuyuan" class="hidden">
+<div class="viewbar"><button class="ghost" data-go="home">← 首页</button><div><h1>超级刘渊 · 技能池</h1><div class="vsub">技能在牌上；本页是刘渊衍生技池（整理：觉醒觉醒）——点牌名弹出该牌可选技能，点一个即选定入账；再点牌名可改选。评语为整理者心得，仅供参考。</div></div></div>
+<div class="panel"><h2>牌名（点开选技能 · 金框=已选定）</h2><div id="lyPool"></div></div>
+<div class="panel"><h2>已选定（点 ✕ 撤销该牌选择）</h2><div id="lySel" style="font-size:13.5px;line-height:2.6"></div>
+<div class="toolbar"><button id="lyClear" class="ghost">全部清空</button></div></div>
+<footer>技能实际效果与结算以实体武将牌/裁定为准；本页只做选择登记。</footer>
+<!-- 弹窗：该牌可选技能 -->
+<div id="lyMask" class="mao-mask hidden"><div class="mao-pop" style="max-width:560px">
+  <div class="mao-pop-src">超级刘渊 · 技能池</div>
+  <div class="mao-pop-name" id="lyPopCard"></div>
+  <div id="lyPopList"></div>
+  <div style="text-align:center;margin-top:10px"><button id="lyClose" class="ghost">关闭</button></div>
+</div></div>
 </div>
 
 <div id="view-rng" class="hidden">
@@ -1484,6 +1504,87 @@ render();
 window.__tl={st:st,POOL:POOL,record:record,undoName:undoName,render:render};
 })();
 
+/* ================= 超级刘渊 · 技能池 ================= */
+(function(){
+var LY=[["杀",[]],["闪",[]],["桃",[]],["酒",[]],
+["顺手牵羊",[["谦逊","可以不中乐不思蜀"],["骤袭","谋邓艾，强度毋庸置疑"]]],
+["过河拆桥",[["数荐","周飞技能，让队友连出三张过河拆桥"]]],
+["五谷丰登",[["惠济","sp甄姬，小仙女，拿别人手牌开五谷"]]],
+["决斗",[["残肆","超级摸牌，毋庸置疑"],["斗阵","牌多很强"],["凤魄","有强中很强"],["空城","超级防御"],["连讨","牌多就是既能打伤害又能过牌"],["裸衣","加伤害"],["双雄","依旧上限强"],["西向","有输出有回血"],["逐北","可以卖血抢劫"]]],
+["南蛮入侵",[["蛮嗣","军八不错"],["蛮王","重铸手牌还带回血"],["镇南","挺强的，虽然要两张牌启动"]]],
+["万箭齐发",[["乱击","就这个比较强了"]]],
+["闪电",[["雷击","配合判定技能就强"],["铸刃","给自己毒匕多刀强"]]],
+["桃园结义",[["武魂","虽然也确实是个威胁大的直接带死技能吧，但是桃园结义居然线上只有这个……"]]],
+["无懈可击",[["龙魂","超级续航很厉害"]]],
+["乐不思蜀",[["国色","运气好一直封印"]]],
+["铁索连环",[["嬉战","可以丢牌干扰对手，还行？"]]],
+["兵粮寸断",[["擅专","能给对面拆牌上延时锦囊"]]],
+["借刀",[["覆载","还可以吧，有过牌，固定有两张装备防御也可以（而且线上一共就三个技能，还有一个是畜鸣）"]]],
+["火攻",[["谬焰","打伤害就能拿牌，手上牌多很强"],["残肆","超级摸牌，毋庸置疑"],["融火","增加火攻的伤害，需要配合"],["知天&智绝","这两个需要一块拿，不然好像没法用，一块拿挺强"]]],
+["无中生有",[["勤政","用牌过牌还行"],["思泣","有过牌，有回血"],["理贤","相当于受伤摸一牌，还需要和二技能配合"]]],
+["诸葛连弩",[["精械","线上仅此一"]]],
+["青釭剑",[["连计","虽然说和这剑也没啥关系了，不过也就这一个"]]],
+["丈八蛇矛",[]],
+["贯石斧",[["蘸金","就这一个"]]],
+["麒麟弓",[]],["古锭刀",[]],["朱雀羽扇",[]],["方天画戟",[]],["寒冰剑",[]],
+["八卦阵",[["解阵","直接封印技能"],["隐世","不怕直伤"],["玲珑","全面覆盖八卦阵"]]],
+["仁王盾",[]],["藤甲",[]],["白银狮子",[]],["木牛流马",[]],["赤兔",[]],["紫骍",[]],["大宛",[]],["绝影",[]],["的卢",[]],["爪黄飞电",[]],["骅骝",[]]];
+var st;try{st=JSON.parse(localStorage.getItem('liuyuan_state_v1'))||null}catch(e){st=null}
+if(!st||typeof st!=='object'||!st.sel)st={sel:{}};
+function save(){localStorage.setItem('liuyuan_state_v1',JSON.stringify(st));}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $id(i){return document.getElementById(i);}
+var curCard=null;
+function poolHtml(){
+  return LY.map(function(e){
+    var n=e[0],got=st.sel[n];
+    var style=got?' style="border-color:#d4af37;box-shadow:0 0 0 2px rgba(212,175,55,.45)"':'';
+    return '<button class="cardname" data-lycard="'+esc(n)+'"'+style+'>'+esc(n)+(got?' ✓':'')+'</button>';
+  }).join("");
+}
+function selHtml(){
+  var ks=Object.keys(st.sel);
+  if(!ks.length)return '<span style="color:#a89878">尚未选择</span>';
+  return ks.map(function(n){
+    return '<button class="cardname" data-lyundo="'+esc(n)+'" style="opacity:.6">'+esc(n)+' → '+esc(st.sel[n])+' ✕</button>';
+  }).join(" ");
+}
+function render(){
+  $id("lyPool").innerHTML=poolHtml();
+  $id("lySel").innerHTML=selHtml();
+}
+function open(card){
+  curCard=card;
+  var e=null;for(var i=0;i<LY.length;i++){if(LY[i][0]===card){e=LY[i];break;}}
+  if(!e)return;
+  $id("lyPopCard").textContent=card+(e[1].length?"（点技能即选定）":"（暂无可选技能）");
+  var got=st.sel[card];
+  $id("lyPopList").innerHTML=e[1].length?e[1].map(function(pair){
+    var mark=(got===pair[0])?'<span style="color:#d4af37;font-size:12px"> ✓ 已选</span>':'';
+    return '<div data-lypick="'+esc(pair[0])+'" style="padding:10px 12px;border:1px solid #ddd3bf;border-radius:8px;margin-bottom:8px;cursor:pointer;background:#fffdf8"><b style="color:#8a1f1f;font-size:15px">'+esc(pair[0])+'</b>'+mark+'<div style="font-size:12.5px;color:#6a5a3e;margin-top:3px;line-height:1.7">'+esc(pair[1])+'</div></div>';
+  }).join(""):'<div style="color:#8a7a5e;font-size:13px;padding:8px 0">这张牌暂无可选技能。</div>';
+  $id("lyMask").classList.remove("hidden");
+}
+function closePop(){$id("lyMask").classList.add("hidden");curCard=null;}
+function pick(skill){
+  if(!curCard)return;
+  st.sel[curCard]=skill;save();render();closePop();
+}
+function undo(card){
+  if(!(card in st.sel))return;
+  delete st.sel[card];save();render();
+}
+function clearAll(){st.sel={};save();render();}
+$id("lyPool").addEventListener("click",function(ev){var b=ev.target.closest("[data-lycard]");if(b)open(b.getAttribute("data-lycard"));});
+$id("lyPopList").addEventListener("click",function(ev){var b=ev.target.closest("[data-lypick]");if(b)pick(b.getAttribute("data-lypick"));});
+$id("lySel").addEventListener("click",function(ev){var b=ev.target.closest("[data-lyundo]");if(b)undo(b.getAttribute("data-lyundo"));});
+$id("lyClose").onclick=closePop;
+$id("lyMask").addEventListener("click",function(ev){if(ev.target===this)closePop();});
+$id("lyClear").onclick=clearAll;
+render();
+window.__ly={LY:LY,st:st,open:open,pick:pick,undo:undo,clear:clearAll,render:render,close:closePop};
+})();
+
 /* ================= 全站检索 ================= */
 (function(){
 var IDX=[
@@ -1500,6 +1601,7 @@ var IDX=[
 {id:"cmi",t:"神曹丕 · 刻名",k:"神曹丕 刻名 同名牌 曹姓 随机发动 受伤 挂起 追踪"},
 {id:"jg",t:"王允 · 矜功三选一",k:"王允 连计 谋逞 矜功 三选一 随机三张 普通锦囊 觉醒 标准军争"},
 {id:"tl",t:"张让 · 滔乱登记",k:"张让 滔乱 十常侍 宦官 牌名 登记 防重复 声明 基本牌 普通锦囊"},
+{id:"liuyuan",t:"超级刘渊 · 技能池",k:"超级刘渊 刘渊 技能池 衍生技 点牌名 选技能 谦逊 骤袭 数荐 残肆 凤魄 武魂 龙魂 谬焰 知天 智绝 蘸金 精械 覆载"},
 {id:"rng",t:"随机数",k:"随机数 整数 小数 上下限"}
 ];
 function $id(i){return document.getElementById(i);}
